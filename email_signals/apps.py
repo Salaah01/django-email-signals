@@ -16,5 +16,5 @@ class EmailSignalsConfig(AppConfig):
                 add_to_registry(model)
 
         # Order matters! We need to register models before we can import
-        # `signals` models as it depends on registering models.
+        # `signals` models as it depends on registered models.
         from . import signals  # noqa: F401

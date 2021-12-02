@@ -3,16 +3,22 @@ from django.db.models import Model
 from django.contrib.contenttypes.models import ContentType
 
 from .models import Signal, SignalConstraint
-from . import constraint_methods
+from . import constraint_methods, utils
 
 
-class ConstaintChecker:
+class ConstraintChecker:
     """Checks that for a model instance that has a potential signal that it can
     raise, firstly passes all the tests required for that instance to be
     permitted to raise the signal.
     """
 
     def __init__(self, instance: Model, signal_kwargs: dict):
+        """Initialise the checker with the instance and signal kwargs.
+
+        Args:
+            instance: The model instance on which a signal is to be raised.
+            signal_kwargs: The kwargs retrieved from the signal handler.
+        """
         self.instance = instance
         self.signal_kwargs = signal_kwargs
         self.constraints = SignalConstraint.objects.filter(
@@ -40,13 +46,16 @@ class ConstaintChecker:
 
         if param_1 in self.signal_kwargs:
             param_1_val = self.signal_kwargs[param_1]
-        elif hasattr(self.instance, param_1):
-            param_1_val = getattr(self.instance, param_1)
         else:
-            raise ValueError(
-                f"ContainsChecker: param_1 {param_1} not found in kwargs or \
-                in instance"
+            success, param_1_val = utils.get_param_from_obj(
+                param_1,
+                self.instance
             )
+            if not success:
+                raise ValueError(
+                    f"ContainsChecker: param_1 {param_1} not found in kwargs"
+                    "in instance"
+                )
 
         if param_2 is None:
             param_2_val = None
@@ -55,7 +64,7 @@ class ConstaintChecker:
         elif hasattr(self.instance, param_2):
             param_2_val = getattr(self.instance, param_2)
         else:
-            passed, param_2_val = self.convert_to_primitive(param_2)
+            passed, param_2_val = utils.convert_to_primitive(param_2)
             if not passed:
                 raise ValueError(
                     f"ContainsChecker: param_2 {param_2} not found in kwargs \
@@ -63,33 +72,6 @@ class ConstaintChecker:
                 )
 
         return param_1_val, param_2_val
-
-    @staticmethod
-    def convert_to_primitive(param: str) -> (bool, _t.Any):
-        """Converts the `param` to a primitive type is possible.
-
-        Returns:
-            bool: True if the `param` was converted to a primitive type.
-            _t.Any: The converted value.
-        """
-        if param.lower() == 'true':
-            return True, True
-        if param.lower() == 'false':
-            return True, False
-        if param.lower() == 'none':
-            return True, None
-        if param.lower() == 'null':
-            return True, None
-        if '.' in param:
-            try:
-                return True, float(param)
-            except ValueError:
-                pass
-        try:
-            return True, int(param)
-        except ValueError:
-            pass
-        return False, param
 
     @staticmethod
     def check_constraint(
