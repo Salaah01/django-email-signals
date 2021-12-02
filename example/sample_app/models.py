@@ -1,3 +1,4 @@
+import typing as _t
 from django.db import models
 from email_signals.models import EmailSignalMixin
 
@@ -5,6 +6,9 @@ from email_signals.models import EmailSignalMixin
 class Customer(models.Model, EmailSignalMixin):
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200)
+
+    def get_email_signal_emails_1(self) -> _t.List[str]:
+        return [self.email]
 
 
 class Product(models.Model):
