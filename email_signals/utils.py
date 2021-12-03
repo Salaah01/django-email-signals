@@ -3,7 +3,7 @@
 import typing as _t
 
 
-def convert_to_primitive(param: str) -> (bool, _t.Any):
+def convert_to_primitive(param: str) -> _t.Any:
     """Converts the `param` to a primitive type is possible.
 
     Returns:
@@ -11,21 +11,21 @@ def convert_to_primitive(param: str) -> (bool, _t.Any):
         _t.Any: The converted value.
     """
     if param.lower() == 'true':
-        return True, True
+        return True
     if param.lower() == 'false':
-        return True, False
+        return False
     if param.lower() in ('none', 'null'):
-        return True, None
+        return None
     if '.' in param:
         try:
-            return True, float(param)
+            return float(param)
         except ValueError:
             pass
     try:
-        return True, int(param)
+        return int(param)
     except ValueError:
         pass
-    return False, param
+    return param
 
 
 def get_param_from_obj(

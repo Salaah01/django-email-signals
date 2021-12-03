@@ -12,50 +12,51 @@ class TestConvertToPrimitive(SimpleTestCase):
         """Test the `convert_to_primitive` method where the paramater provided
         is 'true'
         """
-        self.assertEqual(utils.convert_to_primitive('true'), (True, True))
-        self.assertEqual(utils.convert_to_primitive('tRuE'), (True, True))
+        self.assertEqual(utils.convert_to_primitive('true'), True)
+        self.assertEqual(utils.convert_to_primitive('tRuE'), True)
 
     def test_convert_to_false(self):
         """Test the `convert_to_primitive` method where the paramater provided
         is 'false'
         """
-        self.assertEqual(utils.convert_to_primitive('false'), (True, False))
-        self.assertEqual(utils.convert_to_primitive('fAlSe'), (True, False))
+        self.assertEqual(utils.convert_to_primitive('false'), False)
+        self.assertEqual(utils.convert_to_primitive('fAlSe'), False)
 
     def test_convert_to_none(self):
         """Test the `convert_to_primitive` method where the paramater provided
         is 'none'
         """
-        self.assertEqual(utils.convert_to_primitive('none'), (True, None))
-        self.assertEqual(utils.convert_to_primitive('nOnE'), (True, None))
-        self.assertEqual(utils.convert_to_primitive('null'), (True, None))
-        self.assertEqual(utils.convert_to_primitive('nuLL'), (True, None))
+        self.assertEqual(utils.convert_to_primitive('none'), None)
+        self.assertEqual(utils.convert_to_primitive('nOnE'), None)
+        self.assertEqual(utils.convert_to_primitive('null'), None)
+        self.assertEqual(utils.convert_to_primitive('nuLL'), None)
 
     def test_convert_to_float(self):
         """Test the `convert_to_primitive` method where the paramater provided
         is a float
         """
-        self.assertEqual(utils.convert_to_primitive('1.0'), (True, 1.0))
-        self.assertEqual(utils.convert_to_primitive('1.1'), (True, 1.1))
+        self.assertEqual(utils.convert_to_primitive('1.0'), 1.0)
+        self.assertEqual(utils.convert_to_primitive('1.1'), 1.1)
 
     def test_convert_to_bad_float(self):
         """Test the `convert_to_primitive` method where the paramater provided
-        is not a flat but has a '.' in it.
+        is not a flat but has a '.' in it. It should return the value back as
+        a string.
         """
-        self.assertEqual(utils.convert_to_primitive('1.1.1'), (False, '1.1.1'))
+        self.assertEqual(utils.convert_to_primitive('1.1.1'), '1.1.1')
 
     def test_convert_to_int(self):
         """Test the `convert_to_primitive` method where the paramater provided
         is an int
         """
-        self.assertEqual(utils.convert_to_primitive('1'), (True, 1))
-        self.assertEqual(utils.convert_to_primitive('2'), (True, 2))
+        self.assertEqual(utils.convert_to_primitive('1'), 1)
+        self.assertEqual(utils.convert_to_primitive('2'), 2)
 
     def test_failed_convert_to_primitive(self):
         """Test the `convert_to_primitive` method where the paramater provided
         is not a valid value.
         """
-        self.assertEqual(utils.convert_to_primitive('a'), (False, 'a'))
+        self.assertEqual(utils.convert_to_primitive('a'), 'a')
 
 
 class TestGetParamFromObj(EmailSignalTestCase):
