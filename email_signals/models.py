@@ -40,13 +40,18 @@ class Signal(models.Model):
     plain_text_email = models.TextField(blank=True, null=True)
     html_email = models.TextField(blank=True, null=True)
     subject = models.CharField(max_length=255)
-    from_email = models.EmailField()
+    from_email = models.EmailField(
+        null=True,
+        blank=True,
+        help_text='If not set, `settings.EMAIL_SIGNAL_DEFAULT_FROM_EMAIL` \
+            with be used.'
+    )
     to_emails_opt = models.PositiveIntegerField(
         default=1,
         help_text="The choice of the user to send the email to. For each \
             integer `i`, the method `get_email_signal_emails_<i>` will be \
             called on the model instance. The method should return a list of \
-            emails to send to.",
+            emails to send to."
     )
     template = models.CharField(
         max_length=100,
@@ -67,12 +72,12 @@ class Signal(models.Model):
         """Return the signal type."""
         return getattr(signals, self.signal_type)
 
-    @classmethod
+    @ classmethod
     def get_signal_type_from_choice(cls, choice: int):
         """Return the signal type from the choice."""
         return getattr(signals, choice)
 
-    @classmethod
+    @ classmethod
     def get_choice_from_signal(cls, signal: signals.ModelSignal) -> str:
         """Return the signal type from the signal."""
         if signal == signals.pre_save:
@@ -86,7 +91,7 @@ class Signal(models.Model):
         else:
             raise ValueError(f'Unknown signal: {signal}')
 
-    @classmethod
+    @ classmethod
     def get_for_model_and_signal(
         cls,
         instance: 'Signal',
