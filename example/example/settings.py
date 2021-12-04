@@ -134,7 +134,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'test@example.com'
 EMAIL_HOST = 'localhost'
 EMAIL_HOST_PASSWORD = 'imALittleTeapot'
-EMAIL_SIGNAL_DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
+EMAIL_SIGNAL_DEFAULT_SENDER = DEFAULT_FROM_EMAIL
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'

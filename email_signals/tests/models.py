@@ -23,7 +23,7 @@ class TestCustomerModel(models.Model, EmailSignalMixin):
     name = models.CharField(max_length=200, default=generate_random_string)
     email = models.CharField(max_length=200, default=generate_random_email)
 
-    def get_email_signal_emails_1(self) -> _t.List[str]:
+    def my_mailing_list(self) -> _t.List[str]:
         return [self.email]
 
     @classmethod
@@ -70,7 +70,7 @@ class TestCustomerOrderModel(models.Model, EmailSignalMixin):
         blank=True
     )
 
-    def get_email_signal_emails_1(self) -> _t.List[str]:
+    def my_mailing_list(self) -> _t.List[str]:
         return [self.customer.email]
 
     @classmethod

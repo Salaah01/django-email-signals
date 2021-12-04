@@ -30,7 +30,7 @@ def send_mail(
         None
     """
 
-    from_email = from_email or settings.EMAIL_SIGNAL_DEFAULT_FROM_EMAIL
+    from_email = from_email or settings.EMAIL_SIGNAL_DEFAULT_SENDER
     if template:
         html_message = render_to_string(template, context or {})
 

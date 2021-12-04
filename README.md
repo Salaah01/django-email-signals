@@ -3,14 +3,45 @@ A Django application that provides functionality to create signals via the admin
 
 The application allows you to set your own constraints and email templates and aims to achieve this with minimal configuration.
 
-## Installation
-**Using Pip**: `pip install django-email-signals`
+# Use Cases
+**Admins are able to setup signals/emails themselves**
+If an admin user has requested for an email to be sent when something happens on the database, what do we do? We developers create a new signal, set any constraints, create the email templates, piece everything together, create unit tests and then deploy. Relatively simple, but still time-consuming especially when there are multiple signals to set up for various changes. This quickly becomes a quite lengthy process.
 
-**Using Git**: `git clone https://github.com/Salaah01/django-email-signals.git`
+This application aims to solve this by providing a way for admins to create these signals themselves rather than having to request the feature and wait for deployment. This is a great way to ease the pressure off developers whilst giving admins the ability to get results quickly.
+
+
+**Quickly prototyping and testing an email template**
+Creating and testing templates for some bigger teams can be a time-consuming process. This is particularly true when the request is from someone who for whatever reason cannot view your screen and relies on you deploying to a test environment to be able to test the template.
+
+The process then can become a bit tedious. Ever been in a scenario where you deploy some code to test, have it reviewed, have to tweak some code, redeploy it, and have the process repeated a few times?
+
+This application aims to solve this by providing a way for admins to create the HTML content themselves using a rich text editor. This allows admins to quickly prototype and test the email content themselves. Once ready, all they need to do is click on "show source code", and send that sweet source code to you.
+
+## Installation
+To install the application, run the following command:
+```
+pip install django-email-signals
+```
+
+The pip install command will be all that is required for most people, however if you want to look under the hood and see what's going on, you can clone the source directory:
+```
+git clone https://github.com/Salaah01/django-email-signals.git
+```
 
 ## Setup
 **1. Add to `INSTALLED_APPS`**
-Add `ckeditor` and `email_signals` to your `INSTALLED_APPS` in your `settings.py`. This should be added after any apps which contain models for which you would like to create signals using this application.
+i. Add Add `ckeditor` to your `INSTALLED_APPS` in your `settings.py` file.
+
+```python
+INSTALLED_APPS = [
+  'app_1`,
+  'app_2`,
+  '...',
+  'ckeditor',
+]
+```
+
+ii. Add Add `email_signals` to your `INSTALLED_APPS` in your `settings.py` file. This should be added after any apps which contain models for which you would like to create signals using this application.
 
 ```python
 INSTALLED_APPS = [
@@ -29,9 +60,9 @@ python manage.py collectstatic
 ```
 
 **3. Add a Default Email (Optional)**
-Add `EMAIL_SIGNAL_DEFAULT_FROM_EMAIL` to your settings.
-e.g: `EMAIL_SIGNAL_DEFAULT_FROM_EMAIL = 'someone@mail.com`
-This will setup a default email address to send emails from should you choose not to explicitly set one when creating signals.
+Add `EMAIL_SIGNAL_DEFAULT_SENDER` to your settings.
+e.g: `EMAIL_SIGNAL_DEFAULT_SENDER = 'someone@mail.com`
+If you don't want to explicitly specify a sender email for every signal you define, you can set `EMAIL_SIGNAL_DEFAULT_SENDER` in your project `settings.py`.
 
 **4. Add the Model Mixin**
 On the models that you want to raise signals, you will need to add the following mixin as a dependency to the models: `email_signals.models.EmailSignalMixin`.
@@ -65,17 +96,18 @@ class Customer(models.Model, EmailSignalMixin):
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200)
 
-    def get_email_signal_emails_1(self):
+    def customer_emails(self):
         """Recipient is the customer."""
         return [self.email]
     
-    def get_email_signal_emails_2(self):
+    def management_mailing_list(self):
         """Recipient list includes management."""
         return ['manager@somewhere.com', 'supervisor@somewhere.com']
 ```
 
-Notice that we have two functions, each function starts with "get_email_signal_emails_" and then a positive integer. Each of these functions return a mailing list and we can create as many of these as we need (unless you have to need more than 2,147,483,647 mailing lists). Later on, when we setup the signals, we will need to enter a positive integer to indicate which mailing list to choose when sending an email.
+We've created two functions called `customer_emails` and `management_mailing_list` which each return a collection of email addresses. Later on, when we setup the signals, we will be asked to set the mailing list to use for each signal. This is where we would enter our function names ``customer_emails` or `management_mailing_list`.
 
+This therefore, allows us to set up different mailing lists within our models.
 ## Adding Signals
 Now that the setup is complete, signals can be added via the admin (or by updating the database directly).
 
@@ -88,13 +120,13 @@ is responsible for.
 | ---------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | Name             | name             | An name for your signal, just to make it easier to distinguish from other records.                                             |
 | Description      | description      | (Optional) Description for your signal.                                                                                        |
-| Model (Table)    | content_type     | The model which this signal relates to.                                                                                        |
-| Plain text email | plain_text_email | (Optional) Plain text email to send.                                                                                           |
-| HTML email       | html_email       | (Optional) HTML email to send.                                                                                                 |
+| Model (Table)    | content_type     | Choose from the drop down the model this signal relates to.                                                                                        |
+| Plain text content | plain_message | (Optional) Plain text email to send.                                                                                           |
+| HTML content       | html_message       | (Optional) HTML email to send.                                                                                                 |
 | Subject          | subject          | Email subject                                                                                                                  |
-| From email       | from_email       | (Optional) The email sender. Defaults to `settings.EMAIL_SIGNAL_DEFAULT_FROM_EMAIL`.                                           |
-| Mailing list no  | to_emails_opt    | The recipient list where the integer you enter (i), corresponds to a method called `get_email_signal_emails_<i>` in the model. |
-| Template         | template         | (Optional) Path to a template, should you wish to render an email from a template.                                             |
+| From email       | from_email       | (Optional) The email sender. Defaults to `settings.EMAIL_SIGNAL_DEFAULT_SENDER`.                                           |
+| Mailing list  | mailing_list    | The recipient list where the text you enter, corresponds to a method called in the model class with the same name. e.g: If you enter `customer_mails`, then there will need to be a method called `customer_mails` that returns a collection of emails in the model class. |
+| Template         | template         | (Optional) Path to a template, should you wish to render an email from a template. This uses Django's template loader, so as the value you provide here should be relative to `settings.TEMPLATES[i]['DIRS']`.                                             |
 | Signal Type      | signal_type      | Type of signal to raise for this record.                                                                                       |
 | Active           | active           | A switch to turn this signal on and off.                                                                                       |
 
@@ -159,3 +191,7 @@ Only when all constraints are satisfied will the email be sent.
 The repository comes with an example project to get you started. If you prefer to test this application yourself then I recommend cloning the repository.
 
 Navigating to `example` and running the Django project inside.
+
+
+## Testing
+In the root of the project there is a `runtests.py` file which can be used to run the tests.

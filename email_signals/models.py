@@ -15,9 +15,17 @@ class EmailSignalMixin:
         """Add this model to the registry."""
         add_to_registry(self)
 
-    def email_signal_recipients(self, email_opt: int) -> _t.List[str]:
-        """Return a list of email addresses to send the signal to."""
-        method_name = f'get_email_signal_emails_{email_opt}'
+    def email_signal_recipients(self, method_name: str) -> _t.List[str]:
+        """Return a list of email addresses to send the signal to.
+        
+        Args:
+            method_name: The name of the method which when called will return
+                a mailing list.
+        
+        Returns:
+            A list of email addresses to send emails to.
+        
+        """
         if not hasattr(self, method_name):
             raise NotImplementedError(
                 f'{self.__class__.__name__} has no method {method_name}'
@@ -40,34 +48,36 @@ class Signal(models.Model):
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
-        verbose_name='Model (Table)'
+        verbose_name='Model'
     )
-    plain_text_email = models.TextField(blank=True, null=True)
-    html_email = RichTextField(
+    plain_message = models.TextField(
         blank=True,
         null=True,
-        verbose_name='HTML email'
+        verbose_name='Plain text content'
+    )
+    html_message = RichTextField(
+        blank=True,
+        null=True,
+        verbose_name='HTML content'
     )
     subject = models.CharField(max_length=255)
     from_email = models.EmailField(
         null=True,
         blank=True,
-        help_text='If not set, `settings.EMAIL_SIGNAL_DEFAULT_FROM_EMAIL` \
+        help_text='If not set, `settings.EMAIL_SIGNAL_DEFAULT_SENDER` \
             with be used.'
     )
-    to_emails_opt = models.PositiveIntegerField(
-        default=1,
-        help_text="The choice of the user to send the email to. For each \
-            integer `i`, the method `get_email_signal_emails_<i>` will be \
-            called on the model instance. The method should return a list of \
-            emails to send to.",
-        verbose_name='Mailing list no'
+    mailing_list = models.CharField(
+        max_length=100,
+        help_text="The mailing list to send the signal to. Will search for a \
+            function with the same name in the model instance.",
     )
     template = models.CharField(
         max_length=100,
         blank=True,
         null=True,
-        help_text="Custom template to use for the email."
+        help_text="Custom template to use for the email. (Paths relative to \
+            `settings.TEMPLATES[i]['DIRS']`)"
     )
     signal_type = models.CharField(
         max_length=20,
@@ -147,7 +157,7 @@ class SignalConstraint(models.Model):
     param_1 = models.CharField(
         max_length=255,
         verbose_name='Parameter 1',
-        help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute.'  # noqa 
+        help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute.'  # noqa
     )
     comparison = models.CharField(
         max_length=20,

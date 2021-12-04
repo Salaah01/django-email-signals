@@ -26,11 +26,11 @@ def signal_callback(
         # passed.
         emailer.send_mail(
             subject=model_signal.subject,
-            plain_message=model_signal.plain_text_email,
-            html_message=model_signal.html_email,
+            plain_message=model_signal.plain_message,
+            html_message=model_signal.html_message,
             from_email=model_signal.from_email,
             recipient_list=instance.email_signal_recipients(
-                model_signal.to_emails_opt
+                model_signal.mailing_list
             ),
             template=model_signal.template,
             context={'instance': instance, 'signal_kwargs': kwargs},

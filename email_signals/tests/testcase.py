@@ -72,6 +72,7 @@ class EmailSignalTestCase(TestCase):
         from_email: str = 'test@email.com',
         subject: str = 'Test Subject',
         template: _t.Optional[str] = None,
+        mailing_list: str = 'my_mailing_list'
     ) -> Signal:
         """Create a signal record for a model instance and signal type.
 
@@ -99,7 +100,8 @@ class EmailSignalTestCase(TestCase):
             signal_type=signal_type,
             from_email=from_email,
             subject=subject,
-            template=template
+            template=template,
+            mailing_list=mailing_list
         )
         rec.save()
         return rec
