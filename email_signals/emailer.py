@@ -6,9 +6,9 @@ from django.core.mail import send_mail as _send_mail
 
 def send_mail(
     subject: str,
-    plain_message: str,
-    html_message: str,
     recipient_list: _t.Iterable[str],
+    plain_message: _t.Optional[str] = None,
+    html_message: _t.Optional[str] = None,
     from_email: _t.Optional[str] = None,
     template: _t.Optional[str] = None,
     context: _t.Optional[_t.Dict[str, _t.Any]] = None,
@@ -34,11 +34,10 @@ def send_mail(
     if template:
         html_message = render_to_string(template, context or {})
 
-    if not template:
-        _send_mail(
-            subject=subject,
-            message=plain_message,
-            html_message=html_message,
-            from_email=from_email,
-            recipient_list=recipient_list,
-        )
+    _send_mail(
+        subject=subject,
+        message=plain_message,
+        html_message=html_message,
+        from_email=from_email,
+        recipient_list=recipient_list,
+    )

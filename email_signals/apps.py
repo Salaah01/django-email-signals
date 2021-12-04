@@ -17,4 +17,5 @@ class EmailSignalsConfig(AppConfig):
 
         # Order matters! We need to register models before we can import
         # `signals` models as it depends on registered models.
-        from . import signals  # noqa: F401
+        from . import signals
+        signals.setup()

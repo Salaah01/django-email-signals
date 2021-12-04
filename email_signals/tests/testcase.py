@@ -1,7 +1,25 @@
+import os
+import typing as _t
+from pathlib import Path
 from django.test import TestCase
+from django.conf import settings
 from django.db import models, connection
 from django.contrib.contenttypes.models import ContentType
 from ..models import Signal
+from ..registry import add_to_registry
+from ..signals import setup as signals_setup
+
+
+
+def setup_settings():
+    """Helper function to parts of the settings that are used in the tests."""
+    settings.TEMPLATES = [{
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': os.path.join(
+            Path(__file__).resolve().parent,
+            'test_emailer.html'
+        ),
+    }]
 
 
 class EmailSignalTestCase(TestCase):
@@ -11,12 +29,15 @@ class EmailSignalTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
+
         from .models import TestCustomerModel, TestCustomerOrderModel
 
         TestCustomerModel.create_table()
         TestCustomerOrderModel.create_table()
         cls.Customer = TestCustomerModel
         cls.CustomerOrder = TestCustomerOrderModel
+
+        setup_settings()
         super().setUpClass()
 
     def setUp(self):
@@ -36,10 +57,23 @@ class EmailSignalTestCase(TestCase):
         self.Customer.objects.all().delete()
         super().tearDown()
 
+    def setup_signals(self):
+        """Adds the test models to the signal registry and enables to signals
+        to be raised.
+        """
+        add_to_registry(self.Customer)
+        add_to_registry(self.CustomerOrder)
+        signals_setup()
+
     @staticmethod
     def create_signal(
         model_instance: models.Model,
         signal_type: Signal.SignalTypeChoices = Signal.SignalTypeChoices.pre_save,
+        name: str = 'Test Signal',
+        content_type: _t.Optional[ContentType] = None,
+        from_email: str = 'test@email.com',
+        subject: str = 'Test Subject',
+        template: _t.Optional[str] = None,
     ) -> Signal:
         """Create a signal record for a model instance and signal type.
 
@@ -48,13 +82,26 @@ class EmailSignalTestCase(TestCase):
                 signal for.
             signal_type (Signal.SignalTypeChoices): The signal type to create
                 for the model instance.
+            name (str, optional): The name of the signal. Defaults to
+                'Test Signal'.
+            content_type (ContentType, optional): The content type of the
+                model instance. Defaults to the content type of the instance
+                provided.
+            from_email (str, optional): The from email address to use for
+                the signal. Defaults to 'test@email.com'.
+            subject (str, optional): The subject of the signal. Defaults to
+                'Test Subject'.
+            template (str, optional): The template to use for the signal.
         """
         rec = Signal.objects.create(
-            name='Test Signal',
-            content_type=ContentType.objects.get_for_model(model_instance),
+            name=name,
+            content_type=content_type or ContentType.objects.get_for_model(
+                model_instance
+            ),
             signal_type=signal_type,
-            from_email='test@email.com',
-            subject='Test Subject',
+            from_email=from_email,
+            subject=subject,
+            template=template
         )
         rec.save()
         return rec
