@@ -5,12 +5,14 @@ The application allows you to set your own constraints and email templates and a
 
 # Use Cases
 **Admins are able to setup signals/emails themselves**
+
 If an admin user has requested for an email to be sent when something happens on the database, what do we do? We developers create a new signal, set any constraints, create the email templates, piece everything together, create unit tests and then deploy. Relatively simple, but still time-consuming especially when there are multiple signals to set up for various changes. This quickly becomes a quite lengthy process.
 
 This application aims to solve this by providing a way for admins to create these signals themselves rather than having to request the feature and wait for deployment. This is a great way to ease the pressure off developers whilst giving admins the ability to get results quickly.
 
 
 **Quickly prototyping and testing an email template**
+
 Creating and testing templates for some bigger teams can be a time-consuming process. This is particularly true when the request is from someone who for whatever reason cannot view your screen and relies on you deploying to a test environment to be able to test the template.
 
 The process then can become a bit tedious. Ever been in a scenario where you deploy some code to test, have it reviewed, have to tweak some code, redeploy it, and have the process repeated a few times?
