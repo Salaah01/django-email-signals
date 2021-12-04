@@ -24,7 +24,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         signal_constraint = SignalConstraint.objects.create(
             signal=signal_rec,
             param_1='a',
-            comparision='eq',
+            comparison='eq',
             param_2='b',
         )
         signal_constraint.save()
@@ -54,7 +54,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='zzz',
-            comparision='eq',
+            comparison='eq',
             param_2='b',
         )
         constraint.save()
@@ -71,7 +71,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='a.b',
-            comparision='eq',
+            comparison='eq',
             param_2=None,
         )
         constraint.save()
@@ -93,7 +93,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='customer.name',
-            comparision='eq',
+            comparison='eq',
             param_2=None,
         )
         constraint.save()
@@ -115,7 +115,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='a',
-            comparision='eq',
+            comparison='eq',
             param_2='a.b',
         )
         constraint.save()
@@ -137,7 +137,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='a',
-            comparision='eq',
+            comparison='eq',
             param_2='customer.name',
         )
         constraint.save()
@@ -159,7 +159,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='a',
-            comparision='eq',
+            comparison='eq',
             param_2='b',
         )
         constraint.save()
@@ -179,7 +179,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='a',
-            comparision='eq',
+            comparison='eq',
             param_2='1.1',
         )
         constraint.save()
@@ -196,7 +196,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='a',
-            comparision='exact',
+            comparison='exact',
             param_2='1.1',
         )
         constraint.save()
@@ -213,7 +213,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         constraint = SignalConstraint.objects.create(
             signal=signal,
             param_1='a',
-            comparision='exact',
+            comparison='exact',
             param_2='1.1',
         )
         constraint.save()

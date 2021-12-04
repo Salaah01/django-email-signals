@@ -10,7 +10,6 @@ from ..registry import add_to_registry
 from ..signals import setup as signals_setup
 
 
-
 def setup_settings():
     """Helper function to parts of the settings that are used in the tests."""
     settings.TEMPLATES = [{
@@ -29,7 +28,6 @@ class EmailSignalTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-
         from .models import TestCustomerModel, TestCustomerOrderModel
 
         TestCustomerModel.create_table()

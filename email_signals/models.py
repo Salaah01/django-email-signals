@@ -36,9 +36,17 @@ class Signal(models.Model):
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        verbose_name='Model (Table)'
+    )
     plain_text_email = models.TextField(blank=True, null=True)
-    html_email = models.TextField(blank=True, null=True)
+    html_email = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='HTML email'
+    )
     subject = models.CharField(max_length=255)
     from_email = models.EmailField(
         null=True,
@@ -51,7 +59,8 @@ class Signal(models.Model):
         help_text="The choice of the user to send the email to. For each \
             integer `i`, the method `get_email_signal_emails_<i>` will be \
             called on the model instance. The method should return a list of \
-            emails to send to."
+            emails to send to.",
+        verbose_name='Mailing list no'
     )
     template = models.CharField(
         max_length=100,
@@ -108,7 +117,7 @@ class Signal(models.Model):
 class SignalConstraint(models.Model):
     """Stores the constraints for a signal."""
 
-    COMPARISION_CHOICES = (
+    COMPARISON_CHOICES = (
         ('exact', 'Is Equal To'),
         ('iexact', 'Is Equal To (case insensitive)'),
         ('contains', 'Contains'),
@@ -134,12 +143,23 @@ class SignalConstraint(models.Model):
         on_delete=models.CASCADE,
         related_name='constraints'
     )
-    param_1 = models.CharField(max_length=255)
-    comparision = models.CharField(
-        max_length=20,
-        choices=COMPARISION_CHOICES
+    param_1 = models.CharField(
+        max_length=255,
+        verbose_name='Parameter 1',
+        help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute.'  # noqa 
     )
-    param_2 = models.CharField(max_length=255, blank=True, null=True)
+    comparison = models.CharField(
+        max_length=20,
+        choices=COMPARISON_CHOICES
+    )
+    param_2 = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Parameter 2',
+        help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute. Also supports primitive values.'
+
+    )
 
     def __str__(self) -> str:
-        return f'{self.signal.name} - {self.comparision} - {self.param_1}'
+        return f'{self.signal.name} - {self.comparison} - {self.param_1}'

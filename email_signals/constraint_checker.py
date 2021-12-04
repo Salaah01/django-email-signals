@@ -31,7 +31,7 @@ class ConstraintChecker:
         """Run all tests and return `True` if all tests pass."""
         for constraint in self.constraints:
             p1, p2 = self.get_params(constraint)
-            if not self.check_constraint(p1, p2, constraint.comparision):
+            if not self.check_constraint(p1, p2, constraint.comparison):
                 return False
         return True
 
@@ -113,23 +113,23 @@ class ConstraintChecker:
     def check_constraint(
         param_1: _t.Any,
         param_2: _t.Any,
-        comparision: str
+        comparison: str
     ) -> bool:
         """Check if `param_1` and `param_2` satisfy the constraint.
 
         Args:
             param_1: First parameter to check.
             param_2: Second parameter to check.
-            comparision: Comparison method to use.
+            comparison: Comparison method to use.
 
         Returns:
             True if `param_1` and `param_2` satisfy the constraint.
         """
 
-        method = getattr(constraint_methods, comparision, None)
+        method = getattr(constraint_methods, comparison, None)
         if method is None:
             raise ValueError(
-                f"ContainsChecker: comparison {comparision} not found in "
+                f"ContainsChecker: comparison {comparison} not found in "
                 "constraint_methods"
             )
         return method(param_1, param_2)

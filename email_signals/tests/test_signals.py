@@ -42,7 +42,7 @@ class TestSignals(EmailSignalTestCase):
             signal=signal,
             param_1='id',
             param_2='-1',
-            comparision='exact'
+            comparison='exact'
         )
         signals.signal_callback(
             self.customer_rec,
@@ -64,7 +64,7 @@ class TestSignals(EmailSignalTestCase):
             signal=signal,
             param_1='id',
             param_2='1',
-            comparision='gte'
+            comparison='gte'
         )
         signals.signal_callback(
             self.customer_rec,
@@ -127,7 +127,7 @@ class TestSignals(EmailSignalTestCase):
         models.SignalConstraint.objects.create(
             signal=signal,
             param_1='created',
-            comparision='istrue'
+            comparison='istrue'
         ).save()
         record = self.Customer.create_record()
         record.save()

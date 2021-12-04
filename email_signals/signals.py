@@ -14,8 +14,11 @@ def signal_callback(
     """Callback triggered by signals. This function will check if for a given
     model instance, certain constraints are met. If so, it will send an email.
     """
+    
     model_signals = models.Signal.get_for_model_and_signal(instance, signal)
     for model_signal in model_signals:
+        if not model_signal.active:
+            continue
         if not ConstraintChecker(instance, kwargs).run_tests():
             continue
 
@@ -34,11 +37,15 @@ def signal_callback(
         )
 
 
-# Create signals for each registered model.
-
 def setup():
+    """Dynamically connections functions to signals for each model in the
+    registry.
+    """
+
+    # Import needs to happen here for unittesting - otherwise the
+    # changes `registered_models` to are not picked up by the tests.
     from .registry import registered_models
-    # The types of signals supported.
+
     # TODO: Add support for custom signals.
 
     signal_types = (
