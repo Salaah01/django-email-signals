@@ -5,6 +5,7 @@ The application allows you to set your own constraints and email templates and a
 
 ## Installation
 **Using Pip**: `pip install django-email-signals`
+
 **Using Git**: `git clone https://github.com/Salaah01/django-email-signals.git`
 
 ## Setup
@@ -83,28 +84,28 @@ We will imagine I am running a site on localhost and so the admin panel can be f
 A wise man taught me *it's better to sound silly for a moment than not know something and feel stupid forever*. So, in that vein, though it might seem obvious, we'll go through the options in the form and discuss what each option
 is responsible for.
 
-Field Label | Field Name | Description
------------ | ---------- | -----------
-Name | name | An name for your signal, just to make it easier to distinguish from other records.
-Description | description | (Optional) Description for your signal.
-Model (Table) | content_type | The model which this signal relates to.
-Plain text email | plain_text_email | (Optional) Plain text email to send.
-HTML email | html_email | (Optional) HTML email to send.
-Subject | subject | Email subject
-From email | from_email | (Optional) The email sender. Defaults to `settings.EMAIL_SIGNAL_DEFAULT_FROM_EMAIL`.
-Mailing list no | to_emails_opt | The recipient list where the integer you enter (i), corresponds to a method called `get_email_signal_emails_<i>` in the model.
-Template | template | (Optional) Path to a template, should you wish to render an email from a template.
-Signal Type | signal_type | Type of signal to raise for this record. 
-Active | active | A switch to turn this signal on and off.
+| Field Label      | Field Name       | Description                                                                                                                    |
+| ---------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Name             | name             | An name for your signal, just to make it easier to distinguish from other records.                                             |
+| Description      | description      | (Optional) Description for your signal.                                                                                        |
+| Model (Table)    | content_type     | The model which this signal relates to.                                                                                        |
+| Plain text email | plain_text_email | (Optional) Plain text email to send.                                                                                           |
+| HTML email       | html_email       | (Optional) HTML email to send.                                                                                                 |
+| Subject          | subject          | Email subject                                                                                                                  |
+| From email       | from_email       | (Optional) The email sender. Defaults to `settings.EMAIL_SIGNAL_DEFAULT_FROM_EMAIL`.                                           |
+| Mailing list no  | to_emails_opt    | The recipient list where the integer you enter (i), corresponds to a method called `get_email_signal_emails_<i>` in the model. |
+| Template         | template         | (Optional) Path to a template, should you wish to render an email from a template.                                             |
+| Signal Type      | signal_type      | Type of signal to raise for this record.                                                                                       |
+| Active           | active           | A switch to turn this signal on and off.                                                                                       |
 
 **Signal Constraints**
 This inline model is where you can set some constraints which will determine if the signal should be raised on a case by case basis.
 
-Field Label | Field Name | Description
------------ | ---------- | -----------
-Parameter 1 | param_1 | The first parameter to use when testing a constraint. This parameter must exist in the signal kwargs or the model instance.
-Comparison | comparison | Define how to compare the parameters. E.g: parameter 1 is **greater than** parameter 2.
-Parameter 1 | param_1 | (Optional) The second parameter to use when testing a constraint. This parameter can be left empty when the constraint is something sensible. For example, if constraint is "Is True" then there is no need for parameter 2. But if the constraint is, "Greater Than", then parameter 2 is needed. Parameter 2 can also be a primitive type such as 'a', '1', '1.1'. The application will attempt to convert strings into numbers if it can.
+| Field Label | Field Name | Description                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ----------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter 1 | param_1    | The first parameter to use when testing a constraint. This parameter must exist in the signal kwargs or the model instance.                                                                                                                                                                                                                                                                                                                  |
+| Comparison  | comparison | Define how to compare the parameters. E.g: parameter 1 is **greater than** parameter 2.                                                                                                                                                                                                                                                                                                                                                      |
+| Parameter 1 | param_1    | (Optional) The second parameter to use when testing a constraint. This parameter can be left empty when the constraint is something sensible. For example, if constraint is "Is True" then there is no need for parameter 2. But if the constraint is, "Greater Than", then parameter 2 is needed. Parameter 2 can also be a primitive type such as 'a', '1', '1.1'. The application will attempt to convert strings into numbers if it can. |
 
 **Parameters are Deep**
 Both parameters 1 and 2 allow you to search deep inside an object.
@@ -138,10 +139,10 @@ classDiagram
 
 Given a `CustomerOrder` instance (we'll call this variable `order`), we can set the following in our constraints:
 
-\# | Parameter 1  | Comparison | Parameter 2
--- | ------------ | ---------- | -----------
-1 | `'customer.user.id'` | Greater Than | `'5'`
-2 | `'customer.user.first_name'` | Equal To | `'customer.user.last_name'`
+| \#  | Parameter 1                  | Comparison   | Parameter 2                 |
+| --- | ---------------------------- | ------------ | --------------------------- |
+| 1   | `'customer.user.id'`         | Greater Than | `'5'`                       |
+| 2   | `'customer.user.first_name'` | Equal To     | `'customer.user.last_name'` |
 
 Constraint 1 will check the following:
 ```python
