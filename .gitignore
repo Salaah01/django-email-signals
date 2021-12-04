@@ -261,3 +261,4 @@ pip-selfcheck.json
 temp_scripts/
 (js|css).LICENSE.txt*
 .vscode
+static/

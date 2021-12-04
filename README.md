@@ -9,19 +9,23 @@ The application allows you to set your own constraints and email templates and a
 
 ## Setup
 **1. Add to `INSTALLED_APPS`**
-Add `email_signals` to your `INSTALLED_APPS` in your `settings.py`. This should be added after any apps which contain models for which you would like to create signals using this application.
+Add `ckeditor` and `email_signals` to your `INSTALLED_APPS` in your `settings.py`. This should be added after any apps which contain models for which you would like to create signals using this application.
 
 ```python
 INSTALLED_APPS = [
   'app_1`,
   'app_2`,
   '...',
+  'ckeditor',
   'email_signals`
 ]
 ```
 
-**2. Run Migrations**
-Run `python manage.py migrate`. 
+**2. Run Migrations and Collect Static**
+```
+python manage.py migrate
+python manage.py collectstatic
+```
 
 **3. Add a Default Email (Optional)**
 Add `EMAIL_SIGNAL_DEFAULT_FROM_EMAIL` to your settings.

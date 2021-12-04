@@ -2,6 +2,7 @@ import typing as _t
 from django.db import models
 from django.db.models import signals
 from django.contrib.contenttypes.models import ContentType
+from ckeditor.fields import RichTextField
 from . registry import add_to_registry
 
 
@@ -42,7 +43,7 @@ class Signal(models.Model):
         verbose_name='Model (Table)'
     )
     plain_text_email = models.TextField(blank=True, null=True)
-    html_email = models.TextField(
+    html_email = RichTextField(
         blank=True,
         null=True,
         verbose_name='HTML email'
