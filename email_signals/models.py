@@ -17,14 +17,14 @@ class EmailSignalMixin:
 
     def email_signal_recipients(self, method_name: str) -> _t.List[str]:
         """Return a list of email addresses to send the signal to.
-        
+
         Args:
             method_name: The name of the method which when called will return
                 a mailing list.
-        
+
         Returns:
             A list of email addresses to send emails to.
-        
+
         """
         if not hasattr(self, method_name):
             raise NotImplementedError(
@@ -123,6 +123,11 @@ class Signal(models.Model):
             signal_type=cls.get_choice_from_signal(signal),
             active=True,
         )
+
+    @property
+    def constraints_count(self) -> int:
+        """Return the number of constraints."""
+        return self.constraints.count()
 
 
 class SignalConstraint(models.Model):

@@ -9,6 +9,7 @@ class SignalConstraintInline(admin.TabularInline):
 
 @admin.register(models.Signal)
 class SignalAdmin(admin.ModelAdmin):
-    list_display = ('name', 'content_type', 'signal_type', 'active')
+    list_display = ('name', 'content_type', 'signal_type', 'constraints_count',
+                    'active',)
 
     inlines = [SignalConstraintInline]
