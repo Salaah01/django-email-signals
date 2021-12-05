@@ -3,7 +3,8 @@ dispatched for. Also contains helper functions relating to the registry.
 """
 
 import typing as _t
-from django.db.models import Model
+from django.db.models import Model, QuerySet
+from django.contrib.contenttypes.models import ContentType
 
 
 registered_models: _t.Dict[str, Model] = {}
@@ -41,3 +42,18 @@ def model_in_registry(model: Model) -> bool:
         True if the model is in the registry, False otherwise.
     """
     return model_str(model) in registered_models
+
+
+def registered_content_types() -> QuerySet[ContentType]:
+    """Return a queryset of all the content types registered in the
+    registry.
+
+    Returns:
+        A queryset of all the content types registered in the registry.
+    """
+    content_types = []
+    for model in registered_models.values():
+        content_types.append(ContentType.objects.get_for_model(model))
+
+    content_type_ids = [ct.id for ct in content_types]
+    return ContentType.objects.filter(id__in=content_type_ids)

@@ -27,3 +27,12 @@ class TestRegistry(TestCase):
         self.assertFalse(registry.model_in_registry(Signal))
         registry.add_to_registry(Signal)
         self.assertTrue(registry.model_in_registry(Signal))
+
+    def test_registered_content_types(self):
+        """Tests the registered_content_types function. It is expected to
+        return a queryset of content types for the registered models.
+        """
+        registry.add_to_registry(Signal)
+        results = registry.registered_content_types()
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].model_class(), Signal)

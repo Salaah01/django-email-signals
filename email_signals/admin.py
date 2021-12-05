@@ -1,6 +1,5 @@
 from django.contrib import admin
-from . import models
-
+from . import models, forms
 
 class SignalConstraintInline(admin.TabularInline):
     model = models.SignalConstraint
@@ -12,4 +11,5 @@ class SignalAdmin(admin.ModelAdmin):
     list_display = ('name', 'content_type', 'signal_type', 'constraints_count',
                     'active',)
 
+    form = forms.SignalAdminForm
     inlines = [SignalConstraintInline]
