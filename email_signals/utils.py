@@ -80,7 +80,7 @@ def get_param_from_obj(
             except TypeError:
                 return False, None
 
-        if param in ('self', 'instance'):
+        if param_part in ('self', 'instance'):
             return True, current_object
 
         return False, None

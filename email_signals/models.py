@@ -134,6 +134,23 @@ class Signal(models.Model):
         """Return the model of the signal."""
         return self.content_type.model_class()
 
+    def is_pre_save(self) -> bool:
+        """Return `True` if the signal is a pre save signal."""
+        return self.signal_type == self.SignalTypeChoices.pre_save
+
+    def is_post_save(self) -> bool:
+        """Return `True` if the signal is a post save signal."""
+        return self.signal_type == self.SignalTypeChoices.post_save
+
+    def is_pre_delete(self) -> bool:
+        """Return `True` if the signal is a pre delete signal."""
+        return self.signal_type == self.SignalTypeChoices.pre_delete
+
+    def is_post_delete(self) -> bool:
+        """Return `True` if the signal is a post delete signal."""
+        return self.signal_type == self.SignalTypeChoices.post_delete
+
+
 class SignalConstraint(models.Model):
     """Stores the constraints for a signal."""
 
