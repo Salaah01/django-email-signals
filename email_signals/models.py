@@ -129,6 +129,10 @@ class Signal(models.Model):
         """Return the number of constraints."""
         return self.constraints.count()
 
+    @property
+    def model(self) -> models.base.ModelBase:
+        """Return the model of the signal."""
+        return self.content_type.model_class()
 
 class SignalConstraint(models.Model):
     """Stores the constraints for a signal."""

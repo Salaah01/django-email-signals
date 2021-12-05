@@ -133,3 +133,30 @@ class ConstraintChecker:
                 "constraint_methods"
             )
         return method(param_1, param_2)
+
+
+def comparision_requires_2_params(comparison: str) -> bool:
+    """Check if the comparison requires 2 params.
+
+    Args:
+        comparison: The comparison to check.
+
+    Returns:
+        True if the comparison requires 2 params.
+    """
+    return comparison in [
+        'exact',
+        'iexact',
+        'contains',
+        'icontains',
+        'gt',
+        'gte',
+        'lt',
+        'lte',
+        'startswith',
+        'istartswith',
+        'endswith',
+        'iendswith',
+        'regex',
+        'iregex',
+    ]
