@@ -13,4 +13,5 @@ class SignalAdmin(admin.ModelAdmin):
                     'active',)
 
     form = forms.SignalAdminForm
+    change_form_template = 'email_signals/admin/email_signals/signal/change_form.html'  # noqa: E501
     inlines = [SignalConstraintInline]

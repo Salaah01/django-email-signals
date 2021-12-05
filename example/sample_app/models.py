@@ -19,7 +19,7 @@ class Product(models.Model):
         return self.name
 
 
-class Order(models.Model):
+class Order(models.Model, EmailSignalMixin):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
@@ -39,6 +39,8 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
+    def emails(self):
+        return [self.customer.email]
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
