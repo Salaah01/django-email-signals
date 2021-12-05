@@ -262,3 +262,5 @@ temp_scripts/
 (js|css).LICENSE.txt*
 .vscode
 static/
+
+tmp*

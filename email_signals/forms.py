@@ -60,6 +60,10 @@ class SignalConstraintAdminForm(forms.ModelForm):
         """Validate the comparison is valid for the given parameters.
         Depending on what the `comparison` is, it would limit the value for
         `param_1` and `param_2`.
+
+        Note: Due to the order of fields, we need to preprend the underscore
+        in the function name and call it manually as `param_2` is cleaned
+        after 'comparison'.
         """
 
         comparison = self.cleaned_data['comparison']

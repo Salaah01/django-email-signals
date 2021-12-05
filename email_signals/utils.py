@@ -86,3 +86,45 @@ def get_param_from_obj(
         return False, None
 
     return True, current_object
+
+
+def get_all_obj_attr_names(obj: _t.Any, seen_objects=None) -> dict:
+    """Recursively, get all the attribute names from a object. The first object
+    is expected to be a model instance.
+
+    Args:
+        obj: The object to get the attribute names from.
+        seen_objects: A set of objects IDs that have already been seen.
+
+    Returns:
+        dict: The attribute names of the object.
+    """
+    attr_names = {}
+    seen_objects = seen_objects or set()
+    for attr_name in dir(obj):
+        if attr_name.startswith('_'):
+            continue
+        attr = getattr(obj, attr_name)
+
+        # A level of safety to prevent infinite recursion.
+        if id(attr) in seen_objects:
+            continue
+        seen_objects.add(id(attr))
+
+        # We don't call functions for the user to prevent security risks.
+        # For that reason, we won't get the attribute names of functions.
+        if callable(attr):
+            continue
+        attr_names[attr_name] = {}
+
+        # If the attribute is a foreign key, get the attribute names of the
+        # related object.
+        if hasattr(attr, 'field') and attr.field.is_relation:
+            related_model = attr.field.related_model
+            if related_model != attr.field.model:
+                attr_names[attr_name] = get_all_obj_attr_names(
+                    related_model,
+                    seen_objects
+                )
+
+    return attr_names
