@@ -1,7 +1,7 @@
 """Contains utility functions for the email_signals package."""
 
 import typing as _t
-
+from django.db.models.base import ModelBase
 
 def convert_to_primitive(param: str) -> _t.Any:
     """Converts the `param` to a primitive type is possible.
@@ -88,28 +88,28 @@ def get_param_from_obj(
     return True, current_object
 
 
-def get_all_obj_attr_names(obj: _t.Any, seen_objects=None) -> dict:
-    """Recursively, get all the attribute names from a object. The first object
-    is expected to be a model instance.
+def get_model_attr_names(model_class: ModelBase, seen_attrs=None) -> dict:
+    """Recursively, get all the attribute names from a model class.
 
     Args:
-        obj: The object to get the attribute names from.
-        seen_objects: A set of objects IDs that have already been seen.
+        model_class: The model class to get the attribute names from.
+        seen_attrs: A set of objects IDs that have already been seen.
 
     Returns:
-        dict: The attribute names of the object.
+        dict: The attribute names of the model attributes and their subsequent
+            children names.
     """
     attr_names = {}
-    seen_objects = seen_objects or set()
-    for attr_name in dir(obj):
+    seen_attrs = seen_attrs or set()
+    for attr_name in dir(model_class):
         if attr_name.startswith('_'):
             continue
-        attr = getattr(obj, attr_name)
+        attr = getattr(model_class, attr_name)
 
         # A level of safety to prevent infinite recursion.
-        if id(attr) in seen_objects:
+        if id(attr) in seen_attrs:
             continue
-        seen_objects.add(id(attr))
+        seen_attrs.add(id(attr))
 
         # We don't call functions for the user to prevent security risks.
         # For that reason, we won't get the attribute names of functions.
@@ -122,9 +122,9 @@ def get_all_obj_attr_names(obj: _t.Any, seen_objects=None) -> dict:
         if hasattr(attr, 'field') and attr.field.is_relation:
             related_model = attr.field.related_model
             if related_model != attr.field.model:
-                attr_names[attr_name] = get_all_obj_attr_names(
+                attr_names[attr_name] = get_model_attr_names(
                     related_model,
-                    seen_objects
+                    seen_attrs
                 )
 
     return attr_names
