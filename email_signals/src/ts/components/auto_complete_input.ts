@@ -41,7 +41,7 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
         const itemDiv = document.createElement("DIV");
 
         // Make the matching letters bold
-        itemDiv.innerHTML = `<strong>${option.substr(0, value.length)}</strong>${option.substr(value.length)}`;
+        itemDiv.innerHTML = "<strong>" + option.substr(0, value.length) + "</strong>";
         itemDiv.innerHTML += option.substr(value.length);
 
         // Insert a input field that will hold the current array item's value.

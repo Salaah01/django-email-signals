@@ -4,11 +4,16 @@
   "description": "A Django application that provides functionality to create signals via the admin panel which will send emails based on some changes to some models.",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run watch:signal:change_form:ts\"",
+    "start": "concurrently \"npm run watch:signal:change_form:ts\" \"npm run watch:signal_change_form:css\"",
     "build": "npm-run-all build:signal:change_form:ts",
     "test": "test",
     "watch:signal:change_form:ts": "webpack --config ./webpack.dev.js ./email_signals/src/ts/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js --watch",
-    "build:signal:change_form:ts": "webpack --config ./webpack.prod.js ./email_signals/src/ts/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js"
+    "build:signal:change_form:ts": "webpack --config ./webpack.prod.js ./email_signals/src/ts/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js",
+    "watch:signal_change_form:css": "node-sass ./email_signals/src/sass/signal_change_form.scss ./email_signals/static/css/signal_change_form.min.css -w --output-style compressed",
+    "compile:signal_change_form:css": "node-sass ./email_signals/src/sass/signal_change_form.scss ./email_signals/static/css/signal_change_form.min.css",
+    "prefix:signal_change_form:css": "postcss --use autoprefixer -b \"last 10 versions\" ./email_signals/static/css/signal_change_form.min.css -o ./email_signals/static/css/signal_change_form.min.css",
+    "compress:signal_change_form:css": "node-sass ./email_signals/static/css/signal_change_form.min.css ./email_signals/static/css/signal_change_form.min.css --output-style compressed",
+    "build:signal_change_form:css": "npm-run-all compile:signal_change_form:css prefix:signal_change_form:css compress:signal_change_form:css"
   },
   "repository": {
     "type": "git",
