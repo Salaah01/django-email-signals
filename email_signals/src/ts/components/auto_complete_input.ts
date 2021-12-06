@@ -7,9 +7,9 @@
 const dropdownListID = (input: HTMLInputElement) => {
   let id = input.id;
   if (!id) {
-    id = input.id = `${input.name}_dropdown`;
+    id = input.name;
   }
-  return id;
+  return id + 'autocomplete-list';
 }
 
 const autocomplete = (input: HTMLInputElement, options: string[]) => {
@@ -17,13 +17,13 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
   let currentFocus: number = -1;
   const inputID = dropdownListID(input);
 
+
   input.addEventListener("input", (event) => {
     const value = (event.target as HTMLInputElement).value;
 
     closeAllLists();
 
     if (!value) {
-      console.log("No value");
       return;
     }
 
@@ -31,10 +31,8 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
     const listDiv = document.createElement("DIV");
     listDiv.setAttribute("id", inputID);
     listDiv.setAttribute("class", "autocomplete-items");
-
     // Append the DIV element as a child of the autocomplete container
     input.parentNode!.appendChild(listDiv);
-
     for (const option of options) {
       // Check if the item starts with the same letters as the text field
       // value.
@@ -52,30 +50,27 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
         // Execute a function when someone clicks on the item value
         itemDiv.addEventListener("click", (e) => {
           // Insert the value for the autocomplete text field
-          input.value = (e.target as HTMLInputElement).value;
+          input.value = (e.target as HTMLDivElement).querySelector("input")!.value;
 
           // Close the list of autocompleted values,
           // (or any other open lists of autocompleted values)
-
-
-          // closeAllLists();
+          closeAllLists();
         });
         ;
         // Append the itemDiv to the listDiv
         listDiv.appendChild(itemDiv);
-
       }
     }
-
   });
 
   // Execute a function presses a key on the keyboard.
   input.addEventListener("keydown", (event) => {
-    const listOptions = document.getElementById(
+    let listOptions = document.getElementById(
       inputID
-    )!.getElementsByTagName("div") as HTMLCollectionOf<HTMLElement>;
-
-    // If the key code is not an arrow key, escape, or enter.
+    ) as HTMLElement | HTMLCollectionOf<HTMLElement>
+    if (listOptions) {
+      listOptions = (listOptions as HTMLElement).getElementsByTagName("div") as HTMLCollectionOf<HTMLElement>
+    }
 
     if (event.key == 'ArrowDown') {
       currentFocus++;
@@ -87,6 +82,8 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
 
     } else if (event.key == 'Enter') {
       event.preventDefault();
+      console.log(currentFocus);
+      console.log(listOptions);
       if (currentFocus > -1) {
         if (listOptions[currentFocus]) {
           listOptions[currentFocus].click();
@@ -125,10 +122,7 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
     }
   }
 
-  document.addEventListener("click", (_) => {
-    closeAllLists();
-  }
-  );;
+  document.addEventListener("click", closeAllLists);
 }
 
 export default autocomplete;

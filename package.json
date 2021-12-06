@@ -7,8 +7,8 @@
     "start": "concurrently \"npm run watch:signal:change_form:ts\"",
     "build": "npm-run-all build:signal:change_form:ts",
     "test": "test",
-    "watch:signal:change_form:ts": "webpack --config ./webpack.dev.js ./email_signals/src/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js --watch",
-    "build:signal:change_form:ts": "webpack --config ./webpack.prod.js ./email_signals/src/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js"
+    "watch:signal:change_form:ts": "webpack --config ./webpack.dev.js ./email_signals/src/ts/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js --watch",
+    "build:signal:change_form:ts": "webpack --config ./webpack.prod.js ./email_signals/src/ts/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js"
   },
   "repository": {
     "type": "git",
