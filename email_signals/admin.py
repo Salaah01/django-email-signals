@@ -1,6 +1,7 @@
 from django.contrib import admin
 from . import models, forms
 
+
 class SignalConstraintInline(admin.TabularInline):
     form = forms.SignalConstraintAdminForm
     model = models.SignalConstraint

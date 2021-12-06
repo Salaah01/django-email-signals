@@ -37,6 +37,13 @@ class SignalConstraintAdminForm(forms.ModelForm):
         models = models.SignalConstraint
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Set autocomplete off for all fields.
+        for field in self.fields:
+            self.fields[field].widget.attrs['autocomplete'] = 'off'
+
     def clean(self):
         cleaned_data = super().clean()
         if self.is_valid():
