@@ -2,7 +2,10 @@ from django.db.models import signals
 from django.contrib.contenttypes.models import ContentType
 from ..models import Signal, SignalConstraint
 from .testcase import EmailSignalTestCase
-from email_signals.constraint_checker import ConstraintChecker
+from email_signals.constraint_checker import (
+    ConstraintChecker,
+    comparison_requires_2_params
+)
 
 
 class TestConstraintChecker(EmailSignalTestCase):
@@ -223,3 +226,8 @@ class TestConstraintChecker(EmailSignalTestCase):
         )
 
         self.assertFalse(constaint_checker.run_tests())
+
+    def test_comparison_requires_2_params(self):
+        """Test the `comparison_requires_2_params` method."""
+        self.assertTrue(comparison_requires_2_params('exact'))
+        self.assertFalse(comparison_requires_2_params('istrue'))

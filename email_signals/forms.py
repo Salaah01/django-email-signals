@@ -1,4 +1,6 @@
 from django import forms
+from django.template.loader import get_template
+from django.template import TemplateDoesNotExist
 from . import models
 from .registry import registered_content_types
 from .utils import get_param_from_obj
@@ -29,6 +31,19 @@ class SignalAdminForm(forms.ModelForm):
                 f"The model does not have a function called {mailing_list}"
             )
         return mailing_list
+
+    def clean_template(self):
+        """Check that the template exists."""
+        template = self.cleaned_data['template']
+        if not template:
+            return template
+        try:
+            get_template(template)
+        except TemplateDoesNotExist:
+            raise forms.ValidationError(
+                f"The template {template} does not exist"
+            )
+        return template
 
 
 class SignalConstraintAdminForm(forms.ModelForm):
