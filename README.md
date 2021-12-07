@@ -10,6 +10,8 @@ If an admin user has requested for an email to be sent when something happens on
 
 This application aims to solve this by providing a way for admins to create these signals themselves rather than having to request the feature and wait for deployment. This is a great way to ease the pressure off developers whilst giving admins the ability to get results quickly.
 
+*How would an admin know what fields to enter for the params?*
+The application validates the form before saving but also provides autocomplete for the fields.
 
 **Quickly prototyping and testing an email template**
 
