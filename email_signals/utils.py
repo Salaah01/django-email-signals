@@ -1,6 +1,8 @@
 """Contains utility functions for the email_signals package."""
 
 import typing as _t
+from django.db.models.base import ModelBase
+from django.db.models.fields.related_descriptors import ManyToManyDescriptor
 
 
 def convert_to_primitive(param: str) -> _t.Any:
@@ -80,6 +82,60 @@ def get_param_from_obj(
             except TypeError:
                 return False, None
 
+        if param_part in ('self', 'instance'):
+            return True, current_object
+
         return False, None
 
     return True, current_object
+
+
+def get_model_attr_names(model_class: ModelBase, seen_attrs=None) -> dict:
+    """Recursively, get all the attribute names from a model class.
+
+    Note: This function will not traverse into the `ManyToManyDescriptor`. As
+    we keep a set of seen attributes, by traversing into the
+    `ManyToManyDescriptor` we end up adding an attribute inside a deeper level
+    of the model class which should be in a higher level.
+
+    Args:
+        model_class: The model class to get the attribute names from.
+        seen_attrs: A set of objects IDs that have already been seen.
+
+    Returns:
+        dict: The attribute names of the model attributes and their subsequent
+            children names.
+    """
+    attr_names = {}
+    seen_attrs = seen_attrs or set()
+    for attr_name in dir(model_class):
+
+        # Skip private attributes.
+        if attr_name.startswith('_'):
+            continue
+
+        attr = getattr(model_class, attr_name)
+
+        # A level of safety to prevent infinite recursion.
+        if id(attr) in seen_attrs:
+            continue
+        seen_attrs.add(id(attr))
+
+        # We don't call functions for the user to prevent security risks.
+        # For that reason, we won't get the attribute names of functions.
+        if callable(attr):
+            continue
+        attr_names[attr_name] = {}
+
+        # If the attribute is a foreign key, get the attribute names of the
+        # related object.
+        if (hasattr(attr, 'field') and attr.field.is_relation
+                and not isinstance(attr, ManyToManyDescriptor)):
+            related_model = attr.field.related_model
+            if related_model != attr.field.model:
+                attr_names[attr_name] = get_model_attr_names(
+                    related_model,
+                    seen_attrs
+                )
+
+    return attr_names

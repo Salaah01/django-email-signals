@@ -3,17 +3,12 @@ from django.db import models
 from django.db.models import signals
 from django.contrib.contenttypes.models import ContentType
 from ckeditor.fields import RichTextField
-from . registry import add_to_registry
 
 
 class EmailSignalMixin:
     """A mixin to add a model to the email_signals app."""
 
     EMAIL_SIGNAL_MODEL = True
-
-    def email_signal_post_init(self) -> None:
-        """Add this model to the registry."""
-        add_to_registry(self)
 
     def email_signal_recipients(self, method_name: str) -> _t.List[str]:
         """Return a list of email addresses to send the signal to.
@@ -88,16 +83,11 @@ class Signal(models.Model):
     def __str__(self) -> str:
         return f'({self.signal_type}): {self.name}'
 
-    def get_signal_type(self):
+    def get_signal_type(self) -> signals.ModelSignal:
         """Return the signal type."""
         return getattr(signals, self.signal_type)
 
-    @ classmethod
-    def get_signal_type_from_choice(cls, choice: int):
-        """Return the signal type from the choice."""
-        return getattr(signals, choice)
-
-    @ classmethod
+    @classmethod
     def get_choice_from_signal(cls, signal: signals.ModelSignal) -> str:
         """Return the signal type from the signal."""
         if signal == signals.pre_save:
@@ -111,7 +101,7 @@ class Signal(models.Model):
         else:
             raise ValueError(f'Unknown signal: {signal}')
 
-    @ classmethod
+    @classmethod
     def get_for_model_and_signal(
         cls,
         instance: 'Signal',
@@ -128,6 +118,27 @@ class Signal(models.Model):
     def constraints_count(self) -> int:
         """Return the number of constraints."""
         return self.constraints.count()
+
+    @property
+    def model(self) -> models.base.ModelBase:
+        """Return the model of the signal."""
+        return self.content_type.model_class()
+
+    def is_pre_save(self) -> bool:
+        """Return `True` if the signal is a pre save signal."""
+        return self.signal_type == self.SignalTypeChoices.pre_save
+
+    def is_post_save(self) -> bool:
+        """Return `True` if the signal is a post save signal."""
+        return self.signal_type == self.SignalTypeChoices.post_save
+
+    def is_pre_delete(self) -> bool:
+        """Return `True` if the signal is a pre delete signal."""
+        return self.signal_type == self.SignalTypeChoices.pre_delete
+
+    def is_post_delete(self) -> bool:
+        """Return `True` if the signal is a post delete signal."""
+        return self.signal_type == self.SignalTypeChoices.post_delete
 
 
 class SignalConstraint(models.Model):
@@ -174,7 +185,6 @@ class SignalConstraint(models.Model):
         null=True,
         verbose_name='Parameter 2',
         help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute. Also supports primitive values.'
-
     )
 
     def __str__(self) -> str:

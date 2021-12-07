@@ -62,6 +62,10 @@ class ConstraintChecker:
         Returns:
             The actual value of the param_1 field.
         """
+        if not param_1:
+            raise ValueError(
+                f"`param_1` is a required field."
+            )
 
         success, param_1_val = utils.get_param_from_obj(
             param_1,
@@ -133,3 +137,30 @@ class ConstraintChecker:
                 "constraint_methods"
             )
         return method(param_1, param_2)
+
+
+def comparison_requires_2_params(comparison: str) -> bool:
+    """Check if the comparison requires 2 params.
+
+    Args:
+        comparison: The comparison to check.
+
+    Returns:
+        True if the comparison requires 2 params.
+    """
+    return comparison in [
+        'exact',
+        'iexact',
+        'contains',
+        'icontains',
+        'gt',
+        'gte',
+        'lt',
+        'lte',
+        'startswith',
+        'istartswith',
+        'endswith',
+        'iendswith',
+        'regex',
+        'iregex',
+    ]

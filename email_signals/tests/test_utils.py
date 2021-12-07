@@ -1,8 +1,7 @@
 from types import SimpleNamespace
 from django.test import SimpleTestCase
-from .testcase import EmailSignalTestCase
 from .. import utils
-from ..models import SignalConstraint
+from .testcase import EmailSignalTestCase
 
 
 class TestConvertToPrimitive(SimpleTestCase):
@@ -116,3 +115,48 @@ class TestGetParamFromObj(EmailSignalTestCase):
             ),
             (True, 'Util Test Customer'),
         )
+
+
+class TestGetModelAttrNames(EmailSignalTestCase):
+    """Unittests for the `get_model_attr_names` utility function."""
+
+    def test_get_model_attr_names_customer(self):
+        """Test the `get_model_attr_names` function contains the correct
+        attributes when provided the customer model."""
+        model_attr_names = utils.get_model_attr_names(self.Customer)
+
+        for field in ('id', 'name', 'email'):
+            self.assertIn(field, model_attr_names)
+
+    def test_get_model_attr_names_customer_order(self):
+        """Test the `get_model_attr_names` function contains the correct
+        attributes when provided the customer order model."""
+
+        model_attr_names = utils.get_model_attr_names(self.CustomerOrder)
+
+        for field in ('customer', 'order_number'):
+            self.assertIn(field, model_attr_names)
+
+        for field in ('name', 'email'):
+            self.assertIn(field, model_attr_names['customer'])
+
+    def test_get_model_attrs_m2m_model(self):
+        """Test the `get_model_attr_names` function contains the correct
+        attributes when provided the test M2M model."""
+
+        model_attr_names = utils.get_model_attr_names(self.M2MModel)
+
+        for field in ('id', 'customers', 'fav_colour'):
+            self.assertIn(field, model_attr_names)
+
+    def test_get_model_attrs_one2one_model(self):
+        """Test the `get_model_attr_names` function contains the correct
+        attributes when provided the test one2one model."""
+
+        model_attr_names = utils.get_model_attr_names(self.One2OneModel)
+
+        for field in ('id', 'customer', 'age'):
+            self.assertIn(field, model_attr_names)
+
+        for field in ('id', 'name', 'email'):
+            self.assertIn(field, model_attr_names['customer'])

@@ -10,6 +10,8 @@ If an admin user has requested for an email to be sent when something happens on
 
 This application aims to solve this by providing a way for admins to create these signals themselves rather than having to request the feature and wait for deployment. This is a great way to ease the pressure off developers whilst giving admins the ability to get results quickly.
 
+*How would an admin know what fields to enter for the params?*
+The application validates the form before saving but also provides autocomplete for the fields.
 
 **Quickly prototyping and testing an email template**
 
@@ -61,12 +63,25 @@ python manage.py migrate
 python manage.py collectstatic
 ```
 
-**3. Add a Default Email (Optional)**
+**3. Update URLs (Option)**
+Update your root `urls.py` file to include the following:
+```python
+from django.urls import include
+
+url_patterns = [
+  path('email-signals/', include('email_signals.urls')),
+]
+```
+We recommend changing the URL to something a bit harder to guess, just to make life harder for those pesky snoopers. The application paths all require the user to be a staff member to be able to access the links.
+
+Though this step is optional, we recommend doing it as it will make setting constraints in the admin area much easier. The URLs are needed to provide a dropdown with options when building your constraints.
+
+**4. Add a Default Email (Optional)**
 Add `EMAIL_SIGNAL_DEFAULT_SENDER` to your settings.
 e.g: `EMAIL_SIGNAL_DEFAULT_SENDER = 'someone@mail.com`
 If you don't want to explicitly specify a sender email for every signal you define, you can set `EMAIL_SIGNAL_DEFAULT_SENDER` in your project `settings.py`.
 
-**4. Add the Model Mixin**
+**5. Add the Model Mixin**
 On the models that you want to raise signals, you will need to add the following mixin as a dependency to the models: `email_signals.models.EmailSignalMixin`.
 
 Example:
@@ -88,7 +103,7 @@ class Customer(models.Model, EmailSignalMixin):
     email = models.CharField(max_length=200)
 ```
 
-**5. Add Recipients**
+**6. Add Recipients**
 Depending on the change to the data, you may want to send an email to different people. We facilitate this by setting up the various possible mailing lists into the model itself. This one is easier to show first then explain:
 
 ```python
