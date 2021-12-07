@@ -3,7 +3,7 @@ import typing as _t
 from pathlib import Path
 from django.test import TestCase
 from django.conf import settings
-from django.db import models, connection
+from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from ..models import Signal
 from ..registry import add_to_registry
@@ -28,12 +28,17 @@ class EmailSignalTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        from .models import TestCustomerModel, TestCustomerOrderModel
+        from . import models
 
-        TestCustomerModel.create_table()
-        TestCustomerOrderModel.create_table()
-        cls.Customer = TestCustomerModel
-        cls.CustomerOrder = TestCustomerOrderModel
+        models.TestCustomerModel.create_table()
+        models.TestCustomerOrderModel.create_table()
+        models.TestM2MModel.create_table()
+        models.TestOne2OneModel.create_table()
+
+        cls.Customer = models.TestCustomerModel
+        cls.CustomerOrder = models.TestCustomerOrderModel
+        cls.M2MModel = models.TestM2MModel
+        cls.One2OneModel = models.TestOne2OneModel
 
         setup_settings()
         super().setUpClass()
@@ -47,11 +52,15 @@ class EmailSignalTestCase(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.CustomerOrder.drop_table()
+        cls.M2MModel.drop_table()
+        cls.One2OneModel.drop_table()
         cls.Customer.drop_table()
         super().tearDownClass()
 
     def tearDown(self):
         self.CustomerOrder.objects.all().delete()
+        self.M2MModel.objects.all().delete()
+        self.One2OneModel.objects.all().delete()
         self.Customer.objects.all().delete()
         super().tearDown()
 
@@ -66,7 +75,7 @@ class EmailSignalTestCase(TestCase):
     @staticmethod
     def create_signal(
         model_instance: models.Model,
-        signal_type: Signal.SignalTypeChoices = Signal.SignalTypeChoices.pre_save,
+        signal_type: Signal.SignalTypeChoices = Signal.SignalTypeChoices.pre_save,  # noqa E501
         name: str = 'Test Signal',
         content_type: _t.Optional[ContentType] = None,
         from_email: str = 'test@email.com',

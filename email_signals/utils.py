@@ -2,6 +2,8 @@
 
 import typing as _t
 from django.db.models.base import ModelBase
+from django.db.models.fields.related_descriptors import ManyToManyDescriptor
+
 
 def convert_to_primitive(param: str) -> _t.Any:
     """Converts the `param` to a primitive type is possible.
@@ -91,6 +93,11 @@ def get_param_from_obj(
 def get_model_attr_names(model_class: ModelBase, seen_attrs=None) -> dict:
     """Recursively, get all the attribute names from a model class.
 
+    Note: This function will not traverse into the `ManyToManyDescriptor`. As
+    we keep a set of seen attributes, by traversing into the
+    `ManyToManyDescriptor` we end up adding an attribute inside a deeper level
+    of the model class which should be in a higher level.
+
     Args:
         model_class: The model class to get the attribute names from.
         seen_attrs: A set of objects IDs that have already been seen.
@@ -102,8 +109,11 @@ def get_model_attr_names(model_class: ModelBase, seen_attrs=None) -> dict:
     attr_names = {}
     seen_attrs = seen_attrs or set()
     for attr_name in dir(model_class):
+
+        # Skip private attributes.
         if attr_name.startswith('_'):
             continue
+
         attr = getattr(model_class, attr_name)
 
         # A level of safety to prevent infinite recursion.
@@ -119,7 +129,8 @@ def get_model_attr_names(model_class: ModelBase, seen_attrs=None) -> dict:
 
         # If the attribute is a foreign key, get the attribute names of the
         # related object.
-        if hasattr(attr, 'field') and attr.field.is_relation:
+        if (hasattr(attr, 'field') and attr.field.is_relation
+                and not isinstance(attr, ManyToManyDescriptor)):
             related_model = attr.field.related_model
             if related_model != attr.field.model:
                 attr_names[attr_name] = get_model_attr_names(

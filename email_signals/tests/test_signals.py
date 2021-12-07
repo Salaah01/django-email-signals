@@ -1,8 +1,7 @@
-from unittest.mock import patch
 from django.core import mail
 from django.db.models import signals as django_signals
 from .testcase import EmailSignalTestCase
-from .. import signals, models, apps
+from .. import signals, models
 
 
 class TestSignals(EmailSignalTestCase):
@@ -12,13 +11,13 @@ class TestSignals(EmailSignalTestCase):
         """Test signal callback where there are no additional constraints
         applied to a signal.
         """
-        signal = self.create_signal(self.customer_rec)
+        self.create_signal(self.customer_rec)
         signals.signal_callback(self.customer_rec, django_signals.pre_save)
         self.assertEqual(len(mail.outbox), 1)
 
     def test_signal_callback_with_template(self):
         """Test signal callback where a template is applied to a signal."""
-        signal = self.create_signal(
+        self.create_signal(
             self.customer_rec,
             template='email_signals/tests/test_emailer.html',
         )
