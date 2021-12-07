@@ -1,0 +1,4 @@
+include LICENSE
+include README.md
+recursive-include email_signals/static *
+recursive-include email_signals/templates *
