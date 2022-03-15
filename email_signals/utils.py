@@ -37,7 +37,9 @@ def get_param_from_obj(
     search through the object's attributes until the `param` is found.
 
     Note: Though technically possible, this function will not call a function
-    if a function is found as this could be a security risk.
+    if a function is found. There is no knowing what side effects could occur
+    by calling a function this way as well as any security risks associated
+    with it.
 
     Args:
         param: The param to get the value for.
@@ -55,7 +57,7 @@ def get_param_from_obj(
         param_part = param_parts.pop(0)
 
         # Need to search in a dictionary separately as `hasattr` is not
-        # supported for dictionaries of python 3.8 and below.
+        # supported for dictionaries in python 3.8 and below.
         if isinstance(current_object, dict):
             if param_part in current_object:
                 current_object = current_object[param_part]
@@ -70,7 +72,7 @@ def get_param_from_obj(
         except Exception:
             return False, None
 
-        # Test if the current object is iterable.
+        # Test if the current object can be converted into a number.
         if param_part.isdigit():
             try:
                 iter_object = list(iter(current_object))
