@@ -7,14 +7,12 @@ from . import models, emailer
 
 
 def signal_callback(
-    instance: Model,
-    signal: signals.ModelSignal,
-    **kwargs
+    instance: Model, signal: signals.ModelSignal, **kwargs
 ) -> None:
     """Callback triggered by signals. This function will check if for a given
     model instance, certain constraints are met. If so, it will send an email.
     """
-    
+
     model_signals = models.Signal.get_for_model_and_signal(instance, signal)
     for model_signal in model_signals:
         if not model_signal.active:
@@ -33,7 +31,7 @@ def signal_callback(
                 model_signal.mailing_list
             ),
             template=model_signal.template,
-            context={'instance': instance, 'signal_kwargs': kwargs},
+            context={"instance": instance, "signal_kwargs": kwargs},
         )
 
 
@@ -52,18 +50,16 @@ def setup():
         signals.pre_save,
         signals.post_save,
         signals.pre_delete,
-        signals.post_delete
+        signals.post_delete,
     )
 
     signal_factory = []
 
     for model in registered_models.values():
         for signal_type in signal_types:
-            signal_factory.append(partial(
-                signal_type.connect,
-                signal_callback,
-                sender=model
-            ))
+            signal_factory.append(
+                partial(signal_type.connect, signal_callback, sender=model)
+            )
 
     for function in signal_factory:
         function()

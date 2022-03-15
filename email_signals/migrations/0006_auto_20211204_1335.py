@@ -6,23 +6,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('email_signals', '0005_auto_20211204_1258'),
+        ("email_signals", "0005_auto_20211204_1258"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='signal',
-            name='to_emails_opt',
+            model_name="signal",
+            name="to_emails_opt",
         ),
         migrations.AddField(
-            model_name='signal',
-            name='mailing_list',
-            field=models.CharField(default=1, help_text='The mailing list to send the signal to. Will search for a             function with the same name in the model instance.', max_length=100),
+            model_name="signal",
+            name="mailing_list",
+            field=models.CharField(
+                default=1,
+                help_text="The mailing list to send the signal to. Will search for a             function with the same name in the model instance.",
+                max_length=100,
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='signal',
-            name='template',
-            field=models.CharField(blank=True, help_text="Custom template to use for the email. (Paths relative to             `settings.TEMPLATES[i]['DIRS']`)", max_length=100, null=True),
+            model_name="signal",
+            name="template",
+            field=models.CharField(
+                blank=True,
+                help_text="Custom template to use for the email. (Paths relative to             `settings.TEMPLATES[i]['DIRS']`)",
+                max_length=100,
+                null=True,
+            ),
         ),
     ]

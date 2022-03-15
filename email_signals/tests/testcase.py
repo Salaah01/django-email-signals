@@ -12,13 +12,14 @@ from ..signals import setup as signals_setup
 
 def setup_settings():
     """Helper function to parts of the settings that are used in the tests."""
-    settings.TEMPLATES = [{
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': os.path.join(
-            Path(__file__).resolve().parent,
-            'test_emailer.html'
-        ),
-    }]
+    settings.TEMPLATES = [
+        {
+            "BACKEND": "django.template.backends.django.DjangoTemplates",
+            "DIRS": os.path.join(
+                Path(__file__).resolve().parent, "test_emailer.html"
+            ),
+        }
+    ]
 
 
 class EmailSignalTestCase(TestCase):
@@ -76,12 +77,12 @@ class EmailSignalTestCase(TestCase):
     def create_signal(
         model_instance: models.Model,
         signal_type: Signal.SignalTypeChoices = Signal.SignalTypeChoices.pre_save,  # noqa E501
-        name: str = 'Test Signal',
+        name: str = "Test Signal",
         content_type: _t.Optional[ContentType] = None,
-        from_email: str = 'test@email.com',
-        subject: str = 'Test Subject',
+        from_email: str = "test@email.com",
+        subject: str = "Test Subject",
         template: _t.Optional[str] = None,
-        mailing_list: str = 'my_mailing_list'
+        mailing_list: str = "my_mailing_list",
     ) -> Signal:
         """Create a signal record for a model instance and signal type.
 
@@ -103,14 +104,13 @@ class EmailSignalTestCase(TestCase):
         """
         rec = Signal.objects.create(
             name=name,
-            content_type=content_type or ContentType.objects.get_for_model(
-                model_instance
-            ),
+            content_type=content_type
+            or ContentType.objects.get_for_model(model_instance),
             signal_type=signal_type,
             from_email=from_email,
             subject=subject,
             template=template,
-            mailing_list=mailing_list
+            mailing_list=mailing_list,
         )
         rec.save()
         return rec

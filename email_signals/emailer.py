@@ -30,7 +30,14 @@ def send_mail(
         None
     """
 
-    from_email = from_email or settings.EMAIL_SIGNAL_DEFAULT_SENDER
+    try:
+        from_email = from_email or settings.EMAIL_SIGNAL_DEFAULT_SENDER
+    except AttributeError:
+        raise AttributeError(
+            "Either `from_email` needs to be set for this model instance. "
+            "or `settings.EMAIL_SIGNAL_DEFAULT_SENDER` needs to be set."
+        )
+
     if template:
         html_message = render_to_string(template, context or {})
 

@@ -7,13 +7,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('email_signals', '0003_auto_20211204_0211'),
+        ("email_signals", "0003_auto_20211204_0211"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='signal',
-            name='html_email',
-            field=ckeditor.fields.RichTextField(blank=True, null=True, verbose_name='HTML email'),
+            model_name="signal",
+            name="html_email",
+            field=ckeditor.fields.RichTextField(
+                blank=True, null=True, verbose_name="HTML email"
+            ),
         ),
     ]

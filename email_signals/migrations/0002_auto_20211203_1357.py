@@ -7,23 +7,57 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('email_signals', '0001_initial'),
+        ("email_signals", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='signal',
-            name='from_email',
-            field=models.EmailField(blank=True, help_text='If not set, `settings.EMAIL_SIGNAL_DEFAULT_FROM_EMAIL`             with be used.', max_length=254, null=True),
+            model_name="signal",
+            name="from_email",
+            field=models.EmailField(
+                blank=True,
+                help_text="If not set, `settings.EMAIL_SIGNAL_DEFAULT_FROM_EMAIL`             with be used.",
+                max_length=254,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='signalconstraint',
-            name='comparision',
-            field=models.CharField(choices=[('exact', 'Is Equal To'), ('iexact', 'Is Equal To (case insensitive)'), ('contains', 'Contains'), ('icontains', 'Contains (case insensitive)'), ('gt', 'Greater Than'), ('gte', 'Greater Than or Equal To'), ('lt', 'Less Than'), ('lte', 'Less Than or Equal To'), ('startswith', 'Starts With'), ('istartswith', 'Starts With (case insensitive)'), ('endswith', 'Ends With'), ('iendswith', 'Ends With (case insensitive)'), ('regex', 'Matches Regular Expression'), ('iregex', 'Matches Regular Expression (case insensitive)'), ('isnull', 'Is Null'), ('isnotnull', 'Is Not Null'), ('istrue', 'Is True'), ('isfalse', 'Is False')], max_length=20),
+            model_name="signalconstraint",
+            name="comparision",
+            field=models.CharField(
+                choices=[
+                    ("exact", "Is Equal To"),
+                    ("iexact", "Is Equal To (case insensitive)"),
+                    ("contains", "Contains"),
+                    ("icontains", "Contains (case insensitive)"),
+                    ("gt", "Greater Than"),
+                    ("gte", "Greater Than or Equal To"),
+                    ("lt", "Less Than"),
+                    ("lte", "Less Than or Equal To"),
+                    ("startswith", "Starts With"),
+                    ("istartswith", "Starts With (case insensitive)"),
+                    ("endswith", "Ends With"),
+                    ("iendswith", "Ends With (case insensitive)"),
+                    ("regex", "Matches Regular Expression"),
+                    (
+                        "iregex",
+                        "Matches Regular Expression (case insensitive)",
+                    ),
+                    ("isnull", "Is Null"),
+                    ("isnotnull", "Is Not Null"),
+                    ("istrue", "Is True"),
+                    ("isfalse", "Is False"),
+                ],
+                max_length=20,
+            ),
         ),
         migrations.AlterField(
-            model_name='signalconstraint',
-            name='signal',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='constraints', to='email_signals.signal'),
+            model_name="signalconstraint",
+            name="signal",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="constraints",
+                to="email_signals.signal",
+            ),
         ),
     ]

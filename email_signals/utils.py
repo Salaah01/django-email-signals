@@ -12,13 +12,13 @@ def convert_to_primitive(param: str) -> _t.Any:
         bool: True if the `param` was converted to a primitive type.
         _t.Any: The converted value.
     """
-    if param.lower() == 'true':
+    if param.lower() == "true":
         return True
-    if param.lower() == 'false':
+    if param.lower() == "false":
         return False
-    if param.lower() in ('none', 'null'):
+    if param.lower() in ("none", "null"):
         return None
-    if '.' in param:
+    if "." in param:
         try:
             return float(param)
         except ValueError:
@@ -31,9 +31,7 @@ def convert_to_primitive(param: str) -> _t.Any:
 
 
 def get_param_from_obj(
-    param: str,
-    searchable: object,
-    seperator: str = '.'
+    param: str, searchable: object, seperator: str = "."
 ) -> (bool, _t.Any):
     """Search for the `param` in the `searchable` object. Iteratively
     search through the object's attributes until the `param` is found.
@@ -82,7 +80,7 @@ def get_param_from_obj(
             except TypeError:
                 return False, None
 
-        if param_part in ('self', 'instance'):
+        if param_part in ("self", "instance"):
             return True, current_object
 
         return False, None
@@ -111,7 +109,7 @@ def get_model_attr_names(model_class: ModelBase, seen_attrs=None) -> dict:
     for attr_name in dir(model_class):
 
         # Skip private attributes.
-        if attr_name.startswith('_'):
+        if attr_name.startswith("_"):
             continue
 
         attr = getattr(model_class, attr_name)
@@ -129,13 +127,15 @@ def get_model_attr_names(model_class: ModelBase, seen_attrs=None) -> dict:
 
         # If the attribute is a foreign key, get the attribute names of the
         # related object.
-        if (hasattr(attr, 'field') and attr.field.is_relation
-                and not isinstance(attr, ManyToManyDescriptor)):
+        if (
+            hasattr(attr, "field")
+            and attr.field.is_relation
+            and not isinstance(attr, ManyToManyDescriptor)
+        ):
             related_model = attr.field.related_model
             if related_model != attr.field.model:
                 attr_names[attr_name] = get_model_attr_names(
-                    related_model,
-                    seen_attrs
+                    related_model, seen_attrs
                 )
 
     return attr_names

@@ -10,9 +10,14 @@ class SignalConstraintInline(admin.TabularInline):
 
 @admin.register(models.Signal)
 class SignalAdmin(admin.ModelAdmin):
-    list_display = ('name', 'content_type', 'signal_type', 'constraints_count',
-                    'active',)
+    list_display = (
+        "name",
+        "content_type",
+        "signal_type",
+        "constraints_count",
+        "active",
+    )
 
     form = forms.SignalAdminForm
-    change_form_template = 'email_signals/admin/email_signals/signal/change_form.html'  # noqa: E501
+    change_form_template = "email_signals/admin/email_signals/signal/change_form.html"  # noqa: E501
     inlines = [SignalConstraintInline]

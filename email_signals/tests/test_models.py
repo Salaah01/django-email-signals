@@ -10,8 +10,7 @@ class TestEmailSignalMixin(EmailSignalTestCase):
         """Test the `email_signal_recipients` method."""
 
         self.assertIsInstance(
-            self.customer_rec.email_signal_recipients('my_mailing_list'),
-            list
+            self.customer_rec.email_signal_recipients("my_mailing_list"), list
         )
 
     def test_email_signal_recipients_invalid(self):
@@ -20,7 +19,7 @@ class TestEmailSignalMixin(EmailSignalTestCase):
         """
 
         with self.assertRaises(NotImplementedError):
-            self.customer_rec.email_signal_recipients('invalid_function')
+            self.customer_rec.email_signal_recipients("invalid_function")
 
 
 class TestSignal(EmailSignalTestCase):
@@ -34,7 +33,7 @@ class TestSignal(EmailSignalTestCase):
         """Test the `get_signal_type` method."""
         self.assertIsInstance(
             self.create_signal(self.customer_rec).get_signal_type(),
-            signals.ModelSignal
+            signals.ModelSignal,
         )
 
     def test_get_choice_from_signal(self):
@@ -44,19 +43,19 @@ class TestSignal(EmailSignalTestCase):
         choices = models.Signal.SignalTypeChoices
         self.assertEqual(
             models.Signal.get_choice_from_signal(signals.pre_save),
-            choices.pre_save
+            choices.pre_save,
         )
         self.assertEqual(
             models.Signal.get_choice_from_signal(signals.post_save),
-            choices.post_save
+            choices.post_save,
         )
         self.assertEqual(
             models.Signal.get_choice_from_signal(signals.pre_delete),
-            choices.pre_delete
+            choices.pre_delete,
         )
         self.assertEqual(
             models.Signal.get_choice_from_signal(signals.post_delete),
-            choices.post_delete
+            choices.post_delete,
         )
 
     def test_get_choice_from_signal_invalid(self):
@@ -64,15 +63,14 @@ class TestSignal(EmailSignalTestCase):
         type. It should raise an `ValueError`.
         """
         with self.assertRaises(ValueError):
-            models.Signal.get_choice_from_signal('invalid_signal')
+            models.Signal.get_choice_from_signal("invalid_signal")
 
     def test_get_for_model_and_signal(self):
         """Test the `get_for_model_and_signal` method. Given the model and
         signal, it should return a queryset of `Signal`.
         """
         qs = models.Signal.get_for_model_and_signal(
-            self.customer_rec,
-            signals.pre_save
+            self.customer_rec, signals.pre_save
         )
 
         for q in qs:
@@ -87,15 +85,10 @@ class TestSignal(EmailSignalTestCase):
         self.assertEqual(signal.constraints_count, 0)
 
         models.SignalConstraint.objects.create(
-            signal=signal,
-            param_1='self',
-            comparison='istrue'
+            signal=signal, param_1="self", comparison="istrue"
         ).save()
         models.SignalConstraint.objects.create(
-            signal=signal,
-            param_1='self',
-            comparison='gt',
-            param_2=10
+            signal=signal, param_1="self", comparison="gt", param_2=10
         ).save()
 
         self.assertEqual(signal.constraints_count, 2)
@@ -104,7 +97,7 @@ class TestSignal(EmailSignalTestCase):
         """Test the `model` property."""
         self.assertEqual(
             self.create_signal(self.customer_rec).model,
-            self.customer_rec.__class__
+            self.customer_rec.__class__,
         )
 
     def test_is_pre_save(self):
@@ -142,8 +135,6 @@ class TestSignalConstraint(EmailSignalTestCase):
     def test_str(self):
         signal = self.create_signal(self.customer_rec)
         signal_constraint = models.SignalConstraint.objects.create(
-            signal=signal,
-            param_1='self',
-            comparison='istrue'
+            signal=signal, param_1="self", comparison="istrue"
         )
         self.assertIsInstance(str(signal_constraint), str)

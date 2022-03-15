@@ -8,7 +8,7 @@ from ..models import EmailSignalMixin
 
 def generate_random_string() -> str:
     """Generates a random string."""
-    return ''.join(
+    return "".join(
         random.choice(string.ascii_letters)
         for _ in range(random.randint(3, 10))
     )
@@ -16,11 +16,12 @@ def generate_random_string() -> str:
 
 def generate_random_email() -> str:
     """Generates a random email."""
-    return f'{generate_random_string()}@{generate_random_string()}.com'
+    return f"{generate_random_string()}@{generate_random_string()}.com"
 
 
 class TestCustomerModel(models.Model, EmailSignalMixin):
     """A model used to testing purposes. It will imitate a customer model."""
+
     name = models.CharField(max_length=200, default=generate_random_string)
     email = models.CharField(max_length=200, default=generate_random_email)
 
@@ -34,8 +35,8 @@ class TestCustomerModel(models.Model, EmailSignalMixin):
             with connection.schema_editor() as schema_editor:
                 schema_editor.create_model(cls)
             ContentType.objects.get_or_create(
-                app_label='email_signals',
-                model='testcustomermodel',
+                app_label="email_signals",
+                model="testcustomermodel",
             )
 
     @classmethod
@@ -43,16 +44,16 @@ class TestCustomerModel(models.Model, EmailSignalMixin):
         """Drops the table from the database."""
         if cls._meta.db_table in connection.introspection.table_names():
             with connection.cursor() as cursor:
-                cursor.execute('DROP TABLE IF EXISTS {};'.format(
-                    cls._meta.db_table
-                ))
+                cursor.execute(
+                    "DROP TABLE IF EXISTS {};".format(cls._meta.db_table)
+                )
             ContentType.objects.filter(
-                app_label='email_signals',
-                model='testcustomermodel',
+                app_label="email_signals",
+                model="testcustomermodel",
             ).delete()
 
     @classmethod
-    def create_record(cls) -> 'TestCustomerModel':
+    def create_record(cls) -> "TestCustomerModel":
         """Creates a record in the database."""
         rec = cls.objects.create()
         rec.save()
@@ -63,12 +64,10 @@ class TestCustomerOrderModel(models.Model, EmailSignalMixin):
     """A model used to testing purposes. It will imitate a customer order
     model.
     """
+
     customer = models.ForeignKey(TestCustomerModel, on_delete=models.CASCADE)
     order_number = models.CharField(
-        max_length=100,
-        default=generate_random_string,
-        null=True,
-        blank=True
+        max_length=100, default=generate_random_string, null=True, blank=True
     )
 
     def my_mailing_list(self) -> _t.List[str]:
@@ -81,8 +80,8 @@ class TestCustomerOrderModel(models.Model, EmailSignalMixin):
             with connection.schema_editor() as schema_editor:
                 schema_editor.create_model(cls)
             ContentType.objects.get_or_create(
-                app_label='email_signals',
-                model='testcustomerordermodel',
+                app_label="email_signals",
+                model="testcustomerordermodel",
             )
 
     @classmethod
@@ -90,19 +89,18 @@ class TestCustomerOrderModel(models.Model, EmailSignalMixin):
         """Drops the table from the database."""
         if cls._meta.db_table in connection.introspection.table_names():
             with connection.cursor() as cursor:
-                cursor.execute('DROP TABLE IF EXISTS {};'.format(
-                    cls._meta.db_table
-                ))
+                cursor.execute(
+                    "DROP TABLE IF EXISTS {};".format(cls._meta.db_table)
+                )
             ContentType.objects.filter(
-                app_label='email_signals',
-                model='testcustomerordermodel',
+                app_label="email_signals",
+                model="testcustomerordermodel",
             ).delete()
 
     @classmethod
     def create_record(
-        cls,
-        customer: TestCustomerModel
-    ) -> 'TestCustomerOrderModel':
+        cls, customer: TestCustomerModel
+    ) -> "TestCustomerOrderModel":
         """Creates a record in the database."""
         rec = cls.objects.create(customer=customer)
         rec.save()
@@ -111,13 +109,12 @@ class TestCustomerOrderModel(models.Model, EmailSignalMixin):
 
 class TestM2MModel(models.Model, EmailSignalMixin):
     """A model used to testing purposes. It will imitate a m2m model."""
+
     customers = models.ManyToManyField(
-        TestCustomerModel,
-        related_name='fav_colors'
+        TestCustomerModel, related_name="fav_colors"
     )
     fav_colour = models.CharField(
-        max_length=50,
-        default=generate_random_string
+        max_length=50, default=generate_random_string
     )
 
     @classmethod
@@ -127,8 +124,8 @@ class TestM2MModel(models.Model, EmailSignalMixin):
             with connection.schema_editor() as schema_editor:
                 schema_editor.create_model(cls)
             ContentType.objects.get_or_create(
-                app_label='email_signals',
-                model='testM2MModel',
+                app_label="email_signals",
+                model="testM2MModel",
             )
 
     @classmethod
@@ -136,16 +133,16 @@ class TestM2MModel(models.Model, EmailSignalMixin):
         """Drops the table from the database."""
         if cls._meta.db_table in connection.introspection.table_names():
             with connection.cursor() as cursor:
-                cursor.execute('DROP TABLE IF EXISTS {};'.format(
-                    cls._meta.db_table
-                ))
+                cursor.execute(
+                    "DROP TABLE IF EXISTS {};".format(cls._meta.db_table)
+                )
             ContentType.objects.filter(
-                app_label='email_signals',
-                model='testM2MModel',
+                app_label="email_signals",
+                model="testM2MModel",
             ).delete()
 
     @classmethod
-    def create_record(cls, customer: TestCustomerModel) -> 'TestM2MModel':
+    def create_record(cls, customer: TestCustomerModel) -> "TestM2MModel":
         """Creates a record in the database."""
         rec = cls.objects.create(customer=customer)
         rec.save()
@@ -153,11 +150,12 @@ class TestM2MModel(models.Model, EmailSignalMixin):
 
 
 class TestOne2OneModel(models.Model, EmailSignalMixin):
-    """A model used to testing purposes. It will imitate a one-to-one relation.
+    """A model used to testing purposes. It will imitate a one-to-one
+    relation.
     """
+
     customer = models.OneToOneField(
-        TestCustomerModel,
-        on_delete=models.CASCADE
+        TestCustomerModel, on_delete=models.CASCADE
     )
     age = models.IntegerField(default=10)
 
@@ -168,8 +166,8 @@ class TestOne2OneModel(models.Model, EmailSignalMixin):
             with connection.schema_editor() as schema_editor:
                 schema_editor.create_model(cls)
             ContentType.objects.get_or_create(
-                app_label='email_signals',
-                model='testone2onemodel',
+                app_label="email_signals",
+                model="testone2onemodel",
             )
 
     @classmethod
@@ -177,16 +175,16 @@ class TestOne2OneModel(models.Model, EmailSignalMixin):
         """Drops the table from the database."""
         if cls._meta.db_table in connection.introspection.table_names():
             with connection.cursor() as cursor:
-                cursor.execute('DROP TABLE IF EXISTS {};'.format(
-                    cls._meta.db_table
-                ))
+                cursor.execute(
+                    "DROP TABLE IF EXISTS {};".format(cls._meta.db_table)
+                )
             ContentType.objects.filter(
-                app_label='email_signals',
-                model='testone2onemodel',
+                app_label="email_signals",
+                model="testone2onemodel",
             ).delete()
 
     @classmethod
-    def create_record(cls, customer: TestCustomerModel) -> 'TestOne2OneModel':
+    def create_record(cls, customer: TestCustomerModel) -> "TestOne2OneModel":
         """Creates a record in the database."""
         rec = cls.objects.create(customer=customer)
         rec.save()

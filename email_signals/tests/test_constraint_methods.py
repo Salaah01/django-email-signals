@@ -1,4 +1,3 @@
-import re
 from django.test import SimpleTestCase
 from .. import constraint_methods
 
@@ -13,34 +12,34 @@ class TestConstraintMethods(SimpleTestCase):
 
     def test_iexact(self):
         """Tests the `iexact` constraint method."""
-        self.assertTrue(constraint_methods.iexact('a', 'A'))
-        self.assertTrue(constraint_methods.iexact('a', 'a'))
-        self.assertFalse(constraint_methods.iexact('a', 'b'))
+        self.assertTrue(constraint_methods.iexact("a", "A"))
+        self.assertTrue(constraint_methods.iexact("a", "a"))
+        self.assertFalse(constraint_methods.iexact("a", "b"))
 
     def test_contains(self):
         """Tests the `contains` constraint method."""
-        self.assertTrue(constraint_methods.contains('back', 'a'))
-        self.assertFalse(constraint_methods.contains('a', 'b'))
+        self.assertTrue(constraint_methods.contains("back", "a"))
+        self.assertFalse(constraint_methods.contains("a", "b"))
 
     def test_contains_type_check(self):
         """Tests the `contains` constraint method handles types which are not
         strings.
         """
-        self.assertFalse(constraint_methods.contains(1, 'a'))
-        self.assertFalse(constraint_methods.contains('abc', None))
+        self.assertFalse(constraint_methods.contains(1, "a"))
+        self.assertFalse(constraint_methods.contains("abc", None))
 
     def test_icontains(self):
         """Tests the `icontains` constraint method."""
-        self.assertTrue(constraint_methods.icontains('BACK', 'a'))
-        self.assertTrue(constraint_methods.icontains('a', 'a'))
-        self.assertFalse(constraint_methods.icontains('a', 'b'))
+        self.assertTrue(constraint_methods.icontains("BACK", "a"))
+        self.assertTrue(constraint_methods.icontains("a", "a"))
+        self.assertFalse(constraint_methods.icontains("a", "b"))
 
     def test_icontains_type_check(self):
         """Tests the `icontains` constraint method handles types which are not
         strings.
         """
-        self.assertFalse(constraint_methods.icontains(1, 'a'))
-        self.assertFalse(constraint_methods.icontains('abc', None))
+        self.assertFalse(constraint_methods.icontains(1, "a"))
+        self.assertFalse(constraint_methods.icontains("abc", None))
 
     def test_gt(self):
         """Tests the `gt` constraint method."""
@@ -53,11 +52,11 @@ class TestConstraintMethods(SimpleTestCase):
         numbers.
         """
         # Should convert to floats and compare successfully.
-        self.assertTrue(constraint_methods.gt('1', '0'))
-        self.assertFalse(constraint_methods.gt('0', '1'))
+        self.assertTrue(constraint_methods.gt("1", "0"))
+        self.assertFalse(constraint_methods.gt("0", "1"))
 
         # Should return False if the types cannot be converted.
-        self.assertFalse(constraint_methods.gt('a', 'b'))
+        self.assertFalse(constraint_methods.gt("a", "b"))
 
     def test_gte(self):
         """Tests the `gte` constraint method."""
@@ -70,12 +69,12 @@ class TestConstraintMethods(SimpleTestCase):
         numbers.
         """
         # Should convert to floats and compare successfully.
-        self.assertTrue(constraint_methods.gte('1', '0'))
-        self.assertFalse(constraint_methods.gte('0', '1'))
-        self.assertTrue(constraint_methods.gte('1', '1'))
+        self.assertTrue(constraint_methods.gte("1", "0"))
+        self.assertFalse(constraint_methods.gte("0", "1"))
+        self.assertTrue(constraint_methods.gte("1", "1"))
 
         # Should return False if the types cannot be converted.
-        self.assertFalse(constraint_methods.gte('a', 'b'))
+        self.assertFalse(constraint_methods.gte("a", "b"))
 
     def test_lt(self):
         """Tests the `lt` constraint method."""
@@ -88,11 +87,11 @@ class TestConstraintMethods(SimpleTestCase):
         numbers.
         """
         # Should convert to floats and compare successfully.
-        self.assertTrue(constraint_methods.lt('0', '1'))
-        self.assertFalse(constraint_methods.lt('1', '0'))
+        self.assertTrue(constraint_methods.lt("0", "1"))
+        self.assertFalse(constraint_methods.lt("1", "0"))
 
         # Should return False if the types cannot be converted.
-        self.assertFalse(constraint_methods.lt('a', 'b'))
+        self.assertFalse(constraint_methods.lt("a", "b"))
 
     def test_lte(self):
         """Tests the `lte` constraint method."""
@@ -105,72 +104,72 @@ class TestConstraintMethods(SimpleTestCase):
         numbers.
         """
         # Should convert to floats and compare successfully.
-        self.assertTrue(constraint_methods.lte('0', '1'))
-        self.assertFalse(constraint_methods.lte('1', '0'))
-        self.assertTrue(constraint_methods.lte('1', '1'))
+        self.assertTrue(constraint_methods.lte("0", "1"))
+        self.assertFalse(constraint_methods.lte("1", "0"))
+        self.assertTrue(constraint_methods.lte("1", "1"))
 
         # Should return False if the types cannot be converted.
-        self.assertFalse(constraint_methods.lte('a', 'b'))
+        self.assertFalse(constraint_methods.lte("a", "b"))
 
     def test_startswith(self):
         """Tests the `startswith` constraint method."""
-        self.assertTrue(constraint_methods.startswith('abc', 'a'))
-        self.assertFalse(constraint_methods.startswith('abc', 'b'))
+        self.assertTrue(constraint_methods.startswith("abc", "a"))
+        self.assertFalse(constraint_methods.startswith("abc", "b"))
 
     def test_startswith_type_check(self):
         """Tests the `startswith` constraint method handles types which are not
         strings.
         """
-        self.assertFalse(constraint_methods.startswith(1, 'a'))
-        self.assertFalse(constraint_methods.startswith('abc', None))
+        self.assertFalse(constraint_methods.startswith(1, "a"))
+        self.assertFalse(constraint_methods.startswith("abc", None))
 
     def test_istartswith(self):
         """Tests the `istartswith` constraint method."""
-        self.assertTrue(constraint_methods.istartswith('ABC', 'a'))
-        self.assertTrue(constraint_methods.istartswith('abc', 'a'))
-        self.assertFalse(constraint_methods.istartswith('abc', 'b'))
+        self.assertTrue(constraint_methods.istartswith("ABC", "a"))
+        self.assertTrue(constraint_methods.istartswith("abc", "a"))
+        self.assertFalse(constraint_methods.istartswith("abc", "b"))
 
     def test_istartswith_type_check(self):
         """Tests the `istartswith` constraint method handles types which are
         not strings.
         """
-        self.assertFalse(constraint_methods.istartswith(1, 'a'))
-        self.assertFalse(constraint_methods.istartswith('abc', None))
+        self.assertFalse(constraint_methods.istartswith(1, "a"))
+        self.assertFalse(constraint_methods.istartswith("abc", None))
 
     def test_endswith(self):
         """Tests the `endswith` constraint method."""
-        self.assertTrue(constraint_methods.endswith('abc', 'c'))
-        self.assertFalse(constraint_methods.endswith('abc', 'b'))
+        self.assertTrue(constraint_methods.endswith("abc", "c"))
+        self.assertFalse(constraint_methods.endswith("abc", "b"))
 
     def test_endswith_type_check(self):
         """Tests the `endswith` constraint method handles types which are not
         strings.
         """
-        self.assertFalse(constraint_methods.endswith(1, 'c'))
-        self.assertFalse(constraint_methods.endswith('abc', None))
+        self.assertFalse(constraint_methods.endswith(1, "c"))
+        self.assertFalse(constraint_methods.endswith("abc", None))
 
     def test_iendswith(self):
         """Tests the `iendswith` constraint method."""
-        self.assertTrue(constraint_methods.iendswith('ABC', 'c'))
-        self.assertTrue(constraint_methods.iendswith('abc', 'c'))
-        self.assertFalse(constraint_methods.iendswith('abc', 'b'))
+        self.assertTrue(constraint_methods.iendswith("ABC", "c"))
+        self.assertTrue(constraint_methods.iendswith("abc", "c"))
+        self.assertFalse(constraint_methods.iendswith("abc", "b"))
 
     def test_iendswith_type_check(self):
         """Tests the `iendswith` constraint method handles types which are not
         strings.
         """
-        self.assertFalse(constraint_methods.iendswith(1, 'c'))
-        self.assertFalse(constraint_methods.iendswith('abc', None))
+        self.assertFalse(constraint_methods.iendswith(1, "c"))
+        self.assertFalse(constraint_methods.iendswith("abc", None))
 
     def test_regex(self):
         """Tests the `regex` constraint method."""
-        self.assertTrue(constraint_methods.regex('abc', '^a'))
-        self.assertFalse(constraint_methods.regex('abc', '^b'))
+        self.assertTrue(constraint_methods.regex("abc", "^a"))
+        self.assertFalse(constraint_methods.regex("abc", "^b"))
 
     def test_iregex(self):
         """Tests the `iregex` constraint method."""
-        self.assertTrue(constraint_methods.iregex('Abc1', '^a'))
-        self.assertFalse(constraint_methods.iregex('aBc1', 'd'))
+        self.assertTrue(constraint_methods.iregex("Abc1", "^a"))
+        self.assertFalse(constraint_methods.iregex("aBc1", "d"))
 
     def test_isnull(self):
         """Tests the `isnull` constraint method."""
@@ -185,15 +184,15 @@ class TestConstraintMethods(SimpleTestCase):
     def test_istrue(self):
         """Tests the `istrue` constraint method."""
         self.assertTrue(constraint_methods.istrue(True))
-        self.assertTrue(constraint_methods.istrue('abc'))
+        self.assertTrue(constraint_methods.istrue("abc"))
         self.assertFalse(constraint_methods.istrue(False))
         self.assertFalse(constraint_methods.istrue(None))
-        self.assertFalse(constraint_methods.istrue(''))
+        self.assertFalse(constraint_methods.istrue(""))
 
     def test_isfalse(self):
         """Tests the `isfalse` constraint method."""
         self.assertTrue(constraint_methods.isfalse(False))
-        self.assertTrue(constraint_methods.isfalse(''))
+        self.assertTrue(constraint_methods.isfalse(""))
         self.assertFalse(constraint_methods.isfalse(True))
-        self.assertFalse(constraint_methods.isfalse('abc'))
+        self.assertFalse(constraint_methods.isfalse("abc"))
         self.assertTrue(constraint_methods.isfalse(None))

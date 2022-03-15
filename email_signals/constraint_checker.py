@@ -7,9 +7,8 @@ from . import constraint_methods, utils
 
 
 class ConstraintChecker:
-    """Checks that for a model instance that has a potential signal that it can
-    raise, firstly passes all the tests required for that instance to be
-    permitted to raise the signal.
+    """Determins whether a model instance satisfies a constraints and
+    determines if it is able to raise a signal.
     """
 
     def __init__(self, instance: Model, signal_kwargs: dict):
@@ -36,8 +35,7 @@ class ConstraintChecker:
         return True
 
     def get_params(
-        self,
-        constraint: SignalConstraint
+        self, constraint: SignalConstraint
     ) -> _t.Tuple[_t.Any, _t.Any]:
         """Given a `constraint` param fields, retrieve actual values.
 
@@ -50,7 +48,7 @@ class ConstraintChecker:
 
         return (
             self.get_param_1(constraint.param_1),
-            self.get_param_2(constraint.param_2)
+            self.get_param_2(constraint.param_2),
         )
 
     def get_param_1(self, param_1: str) -> _t.Any:
@@ -63,21 +61,15 @@ class ConstraintChecker:
             The actual value of the param_1 field.
         """
         if not param_1:
-            raise ValueError(
-                f"`param_1` is a required field."
-            )
+            raise ValueError("`param_1` is a required field.")
 
         success, param_1_val = utils.get_param_from_obj(
-            param_1,
-            self.signal_kwargs
+            param_1, self.signal_kwargs
         )
         if success:
             return param_1_val
 
-        success, param_1_val = utils.get_param_from_obj(
-            param_1,
-            self.instance
-        )
+        success, param_1_val = utils.get_param_from_obj(param_1, self.instance)
         if not success:
             raise ValueError(
                 f"ContainsChecker: param_1 {param_1} not found in kwargs "
@@ -98,16 +90,12 @@ class ConstraintChecker:
             return None
 
         success, param_2_val = utils.get_param_from_obj(
-            param_2,
-            self.signal_kwargs
+            param_2, self.signal_kwargs
         )
         if success:
             return param_2_val
 
-        success, param_2_val = utils.get_param_from_obj(
-            param_2,
-            self.instance
-        )
+        success, param_2_val = utils.get_param_from_obj(param_2, self.instance)
         if success:
             return param_2_val
 
@@ -115,9 +103,7 @@ class ConstraintChecker:
 
     @staticmethod
     def check_constraint(
-        param_1: _t.Any,
-        param_2: _t.Any,
-        comparison: str
+        param_1: _t.Any, param_2: _t.Any, comparison: str
     ) -> bool:
         """Check if `param_1` and `param_2` satisfy the constraint.
 
@@ -149,18 +135,18 @@ def comparison_requires_2_params(comparison: str) -> bool:
         True if the comparison requires 2 params.
     """
     return comparison in [
-        'exact',
-        'iexact',
-        'contains',
-        'icontains',
-        'gt',
-        'gte',
-        'lt',
-        'lte',
-        'startswith',
-        'istartswith',
-        'endswith',
-        'iendswith',
-        'regex',
-        'iregex',
+        "exact",
+        "iexact",
+        "contains",
+        "icontains",
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "startswith",
+        "istartswith",
+        "endswith",
+        "iendswith",
+        "regex",
+        "iregex",
     ]

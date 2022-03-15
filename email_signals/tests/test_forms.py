@@ -1,7 +1,7 @@
 import typing as _t
 from django.contrib.contenttypes.models import ContentType
 from .testcase import EmailSignalTestCase
-from ..forms import SignalAdminForm, SignalConstraintAdminForm
+from ..forms import SignalAdminForm
 from ..registry import add_to_registry
 
 
@@ -15,22 +15,21 @@ class TestSignalAdminForm(EmailSignalTestCase):
         add_to_registry(cls.Customer)
 
     def sample_form(
-        self,
-        override_form_data: _t.Optional[dict] = None
+        self, override_form_data: _t.Optional[dict] = None
     ) -> SignalAdminForm:
         form_data = {
             "name": "Test Signal",
-            'description': 'Test description',
-            'content_type': ContentType.objects.get_for_model(
+            "description": "Test description",
+            "content_type": ContentType.objects.get_for_model(
                 self.customer_rec
             ).pk,
-            'plain_message': 'Test plain message',
-            'html_message': 'Test html message',
-            'subject': 'Test subject',
-            'from_email': 'test@email.com',
-            'mailing_list': 'my_mailing_list',
-            'template': None,
-            'signal_type': 'pre_save'
+            "plain_message": "Test plain message",
+            "html_message": "Test html message",
+            "subject": "Test subject",
+            "from_email": "test@email.com",
+            "mailing_list": "my_mailing_list",
+            "template": None,
+            "signal_type": "pre_save",
         }
         form_data.update(override_form_data or {})
         form = SignalAdminForm(data=form_data)
@@ -44,18 +43,17 @@ class TestSignalAdminForm(EmailSignalTestCase):
 
     def test_invalid_mailing_list(self):
         """Test form where an invalid `mailing_list` is provided."""
-        form = self.sample_form({'mailing_list': 'invalid'})
+        form = self.sample_form({"mailing_list": "invalid"})
         self.assertFalse(form.is_valid())
 
     def test_invalid_template(self):
         """Test form where an invalid `template` is provided."""
-        form = self.sample_form({'template': 'invalid'})
+        form = self.sample_form({"template": "invalid"})
         self.assertFalse(form.is_valid())
 
     def test_valid_template(self):
         """Test form where a valid `template` is provided."""
-        form = self.sample_form({
-            'template':
-            'email_signals/tests/test_emailer.html'
-        })
+        form = self.sample_form(
+            {"template": "email_signals/tests/test_emailer.html"}
+        )
         self.assertTrue(form.is_valid(), form.data)

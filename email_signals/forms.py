@@ -1,7 +1,6 @@
 from django import forms
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
-from django.contrib.contenttypes.models import ContentType
 from . import models
 from .registry import registered_content_types
 from .utils import get_param_from_obj
@@ -9,16 +8,15 @@ from .constraint_checker import comparison_requires_2_params
 
 
 class SignalAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.Signal
-        fields = '__all__'
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         # Limit the content type choices to the registered content types
-        self.fields['content_type'].queryset = registered_content_types()
+        self.fields["content_type"].queryset = registered_content_types()
 
     def clean(self):
         cleaned_data = super().clean()
@@ -27,12 +25,12 @@ class SignalAdminForm(forms.ModelForm):
         return cleaned_data
 
     def _clean_mailing_list(self):
-        """The `mailing_list` fill contains a string which corresponds to a
-        function that should exist in the model instance. Check that the
-        function does exists.
+        """The `mailing_list` field contains a string which corresponds to a
+        method that should exist in the model. Check that the function does
+        exists.
         """
-        mailing_list = self.cleaned_data['mailing_list']
-        content_type = self.cleaned_data['content_type']
+        mailing_list = self.cleaned_data["mailing_list"]
+        content_type = self.cleaned_data["content_type"]
 
         if not hasattr(content_type.model_class(), mailing_list):
             raise forms.ValidationError(
@@ -42,7 +40,7 @@ class SignalAdminForm(forms.ModelForm):
 
     def clean_template(self):
         """Check that the template exists."""
-        template = self.cleaned_data['template']
+        template = self.cleaned_data["template"]
         if not template:
             return template
         try:
@@ -55,17 +53,16 @@ class SignalAdminForm(forms.ModelForm):
 
 
 class SignalConstraintAdminForm(forms.ModelForm):
-
     class Meta:
         models = models.SignalConstraint
-        fields = '__all__'
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         # Set autocomplete off for all fields.
         for field in self.fields:
-            self.fields[field].widget.attrs['autocomplete'] = 'off'
+            self.fields[field].widget.attrs["autocomplete"] = "off"
 
     def clean(self):
         cleaned_data = super().clean()
@@ -77,7 +74,7 @@ class SignalConstraintAdminForm(forms.ModelForm):
         """Validate `param_2` can be found in either the signal `kwargs` or the
         model instance.
         """
-        param_1 = self.cleaned_data['param_1']
+        param_1 = self.cleaned_data["param_1"]
 
         valid, _ = get_param_from_obj(param_1, self.instance)
         if not valid:
@@ -87,7 +84,7 @@ class SignalConstraintAdminForm(forms.ModelForm):
         return param_1
 
     def _clean_comparison(self):
-        """Validate the comparison is valid for the given parameters.
+        """Check that the comparison is valid for the given parameters.
         Depending on what the `comparison` is, it would limit the value for
         `param_1` and `param_2`.
 
@@ -96,8 +93,8 @@ class SignalConstraintAdminForm(forms.ModelForm):
         after 'comparison'.
         """
 
-        comparison = self.cleaned_data['comparison']
-        param_2 = self.cleaned_data['param_2']
+        comparison = self.cleaned_data["comparison"]
+        param_2 = self.cleaned_data["param_2"]
 
         if comparison_requires_2_params(comparison) and not param_2:
             raise forms.ValidationError(

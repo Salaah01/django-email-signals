@@ -8,37 +8,50 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        ('email_signals', '0004_alter_signal_html_email'),
+        ("contenttypes", "0002_remove_content_type_name"),
+        ("email_signals", "0004_alter_signal_html_email"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='signal',
-            name='html_email',
+            model_name="signal",
+            name="html_email",
         ),
         migrations.RemoveField(
-            model_name='signal',
-            name='plain_text_email',
+            model_name="signal",
+            name="plain_text_email",
         ),
         migrations.AddField(
-            model_name='signal',
-            name='html_message',
-            field=ckeditor.fields.RichTextField(blank=True, null=True, verbose_name='HTML content'),
+            model_name="signal",
+            name="html_message",
+            field=ckeditor.fields.RichTextField(
+                blank=True, null=True, verbose_name="HTML content"
+            ),
         ),
         migrations.AddField(
-            model_name='signal',
-            name='plain_message',
-            field=models.TextField(blank=True, null=True, verbose_name='Plain text content'),
+            model_name="signal",
+            name="plain_message",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Plain text content"
+            ),
         ),
         migrations.AlterField(
-            model_name='signal',
-            name='content_type',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype', verbose_name='Model'),
+            model_name="signal",
+            name="content_type",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="contenttypes.contenttype",
+                verbose_name="Model",
+            ),
         ),
         migrations.AlterField(
-            model_name='signal',
-            name='from_email',
-            field=models.EmailField(blank=True, help_text='If not set, `settings.EMAIL_SIGNAL_DEFAULT_SENDER`             with be used.', max_length=254, null=True),
+            model_name="signal",
+            name="from_email",
+            field=models.EmailField(
+                blank=True,
+                help_text="If not set, `settings.EMAIL_SIGNAL_DEFAULT_SENDER`             with be used.",
+                max_length=254,
+                null=True,
+            ),
         ),
     ]

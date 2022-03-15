@@ -12,15 +12,12 @@ class TestRegistry(TestCase):
 
     def test_model_str(self):
         """Tests the model_str function."""
-        self.assertEqual(registry.model_str(Signal), 'email_signals.signal')
+        self.assertEqual(registry.model_str(Signal), "email_signals.signal")
 
     def test_add_to_registry(self):
         """Tests the add_to_registry function."""
         registry.add_to_registry(Signal)
-        self.assertEqual(
-            list(registry.registered_models.values()),
-            [Signal]
-        )
+        self.assertEqual(list(registry.registered_models.values()), [Signal])
 
     def test_model_in_registry(self):
         """Tests the model_in_registry function."""

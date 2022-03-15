@@ -7,39 +7,59 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        ('email_signals', '0002_auto_20211203_1357'),
+        ("contenttypes", "0002_remove_content_type_name"),
+        ("email_signals", "0002_auto_20211203_1357"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='signalconstraint',
-            old_name='comparision',
-            new_name='comparison',
+            model_name="signalconstraint",
+            old_name="comparision",
+            new_name="comparison",
         ),
         migrations.AlterField(
-            model_name='signal',
-            name='content_type',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype', verbose_name='Model (Table)'),
+            model_name="signal",
+            name="content_type",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="contenttypes.contenttype",
+                verbose_name="Model (Table)",
+            ),
         ),
         migrations.AlterField(
-            model_name='signal',
-            name='html_email',
-            field=models.TextField(blank=True, null=True, verbose_name='HTML email'),
+            model_name="signal",
+            name="html_email",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="HTML email"
+            ),
         ),
         migrations.AlterField(
-            model_name='signal',
-            name='to_emails_opt',
-            field=models.PositiveIntegerField(default=1, help_text='The choice of the user to send the email to. For each             integer `i`, the method `get_email_signal_emails_<i>` will be             called on the model instance. The method should return a list of             emails to send to.', verbose_name='Mailing list no'),
+            model_name="signal",
+            name="to_emails_opt",
+            field=models.PositiveIntegerField(
+                default=1,
+                help_text="The choice of the user to send the email to. For each             integer `i`, the method `get_email_signal_emails_<i>` will be             called on the model instance. The method should return a list of             emails to send to.",
+                verbose_name="Mailing list no",
+            ),
         ),
         migrations.AlterField(
-            model_name='signalconstraint',
-            name='param_1',
-            field=models.CharField(help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute.', max_length=255, verbose_name='Parameter 1'),
+            model_name="signalconstraint",
+            name="param_1",
+            field=models.CharField(
+                help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute.',
+                max_length=255,
+                verbose_name="Parameter 1",
+            ),
         ),
         migrations.AlterField(
-            model_name='signalconstraint',
-            name='param_2',
-            field=models.CharField(blank=True, help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute. Also supports primitive values.', max_length=255, null=True, verbose_name='Parameter 2'),
+            model_name="signalconstraint",
+            name="param_2",
+            field=models.CharField(
+                blank=True,
+                help_text='Will be searched in the instance and signal kwargs recursively. Use "." to show a layer in each attribute. Also supports primitive values.',
+                max_length=255,
+                null=True,
+                verbose_name="Parameter 2",
+            ),
         ),
     ]
