@@ -1,10 +1,24 @@
 from django import forms
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
+from django.utils.html import format_html
 from . import models
 from .registry import registered_content_types
 from .utils import get_param_from_obj
 from .constraint_checker import comparison_requires_2_params
+
+
+def render_js(cls):
+    """Forcing all media forms to be deferred."""
+    return [
+        format_html(
+            '<script defer src="{}"></script>',
+            cls.absolute_path(path)
+        ) for path in cls._js
+    ]
+
+
+forms.widgets.Media.render_js = render_js
 
 
 class SignalAdminForm(forms.ModelForm):

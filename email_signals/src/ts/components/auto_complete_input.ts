@@ -22,7 +22,7 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
     const value = (event.target as HTMLInputElement).value;
 
     closeAllLists();
-
+    
     if (!value) {
       return;
     }
@@ -31,8 +31,11 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
     const listDiv = document.createElement("DIV");
     listDiv.setAttribute("id", inputID);
     listDiv.setAttribute("class", "autocomplete-items");
-    // Append the DIV element as a child of the autocomplete container
-    input.parentNode!.appendChild(listDiv);
+    // Append the DIV element as a child of the autocomplete container and
+    // ensure that overflow is not set to hidden (Grapelli support).
+    const parentNode = input.parentNode as HTMLElement;
+    parentNode.appendChild(listDiv);
+    parentNode.style.overflow = 'unset';
     for (const option of options) {
       // Check if the item starts with the same letters as the text field
       // value.
@@ -82,8 +85,6 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
 
     } else if (event.key == 'Enter') {
       event.preventDefault();
-      console.log(currentFocus);
-      console.log(listOptions);
       if (currentFocus > -1) {
         if (listOptions[currentFocus]) {
           listOptions[currentFocus].click();
