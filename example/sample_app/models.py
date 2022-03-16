@@ -42,6 +42,7 @@ class Order(models.Model, EmailSignalMixin):
     def emails(self):
         return [self.customer.email]
 
+
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)

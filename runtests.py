@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-import os
+#!/usr/bin/env python3
 import sys
 import warnings
 from optparse import OptionParser
@@ -26,7 +25,7 @@ def runtests(test_path='email_signals'):
                 'django.contrib.auth',
                 'email_signals',
             ),
-            ROOT_URLCONF=None,  # tests override urlconf, but it still needs to be defined
+            ROOT_URLCONF=None,
             LANGUAGES=(('en', 'English'),),
             MIDDLEWARE_CLASSES=(),
         )
