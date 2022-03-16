@@ -21,3 +21,7 @@ class SignalAdmin(admin.ModelAdmin):
     form = forms.SignalAdminForm
     change_form_template = "email_signals/admin/email_signals/signal/change_form.html"  # noqa: E501
     inlines = [SignalConstraintInline]
+
+    class Media:
+        css = {"all": ("email_signals/css/signal_change_form.min.css",)}
+        js = ("email_signals/js/signal_change_form.min.js",)

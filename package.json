@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run watch:signal:change_form:ts\" \"npm run watch:signal_change_form:css\"",
-    "build": "npm-run-all build:signal:change_form:ts",
+    "build": "npm-run-all build:signal:change_form:ts build:signal_change_form:css",
     "test": "test",
     "watch:signal:change_form:ts": "webpack --config ./webpack.dev.js ./email_signals/src/ts/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js --watch",
     "build:signal:change_form:ts": "webpack --config ./webpack.prod.js ./email_signals/src/ts/signal_change_form.ts --output ./email_signals/static/email_signals/js/signal_change_form.min.js",
-    "watch:signal_change_form:css": "node-sass ./email_signals/src/sass/signal_change_form.scss ./email_signals/static/css/signal_change_form.min.css -w --output-style compressed",
-    "compile:signal_change_form:css": "node-sass ./email_signals/src/sass/signal_change_form.scss ./email_signals/static/css/signal_change_form.min.css",
-    "prefix:signal_change_form:css": "postcss --use autoprefixer -b \"last 10 versions\" ./email_signals/static/css/signal_change_form.min.css -o ./email_signals/static/css/signal_change_form.min.css",
-    "compress:signal_change_form:css": "node-sass ./email_signals/static/css/signal_change_form.min.css ./email_signals/static/css/signal_change_form.min.css --output-style compressed",
+    "watch:signal_change_form:css": "node-sass ./email_signals/src/sass/signal_change_form.scss ./email_signals/static/email_signals/css/signal_change_form.min.css -w --output-style compressed",
+    "compile:signal_change_form:css": "node-sass ./email_signals/src/sass/signal_change_form.scss ./email_signals/static/email_signals/css/signal_change_form.min.css",
+    "prefix:signal_change_form:css": "postcss --use autoprefixer -b \"last 10 versions\" ./email_signals/static/email_signals/css/signal_change_form.min.css -o ./email_signals/static/email_signals/css/signal_change_form.min.css",
+    "compress:signal_change_form:css": "node-sass ./email_signals/static/email_signals/css/signal_change_form.min.css ./email_signals/static/email_signals/css/signal_change_form.min.css --output-style compressed",
     "build:signal_change_form:css": "npm-run-all compile:signal_change_form:css prefix:signal_change_form:css compress:signal_change_form:css"
   },
   "repository": {
@@ -31,7 +31,6 @@
     "@babel/preset-react": "^7.12.13",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.35",
-    "@types/node-sass": "^4.11.1",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "autoprefixer": "^9.7.6",
@@ -53,7 +52,6 @@
     "eslint-plugin-flowtype": "^4.7.0",
     "eslint-plugin-import": "^2.22.1",
     "jest": "^25.2.7",
-    "node-sass": "^4.14.1",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.3.5",
     "postcss-cli": "^8.3.1",
@@ -70,9 +68,8 @@
     "typescript": "^4.2.3",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.11",
-    "webpack-merge": "^5.7.3"
-  },
-  "dependencies": {
-    "concurrently": "^6.4.0"
+    "webpack-merge": "^5.7.3",
+    "concurrently": "^6.4.0",
+    "node-sass": "^7.0.1"
   }
 }
