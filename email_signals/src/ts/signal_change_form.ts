@@ -2,12 +2,30 @@
 import autocomplete from './components/auto_complete_input';
 
 
+/**Returns the button to add new rows to the inline table.
+ * Supports Grapelli.
+ */
+const getAddNewRowBtn = () => {
+  let newRowBtn = document.querySelectorAll('.add-row a')
+
+  if (!newRowBtn.length) {
+    newRowBtn = document.querySelectorAll('.grp-add-handler')
+  }
+
+  if (!newRowBtn.length) {
+    console.warn('Could not find add new row button.')
+  }
+  return newRowBtn
+}
+
+
 /**Contains a collections of param inputs. */
 class ParamInputs {
   inputsRegistry: { [key: string]: HTMLInputElement } = {};
   deleteBtnsRegistry: Set<HTMLElement> = new Set();
 
   constructor() {
+    // Run only when window is loaded.
     this.setNewRowEventListener();
     this.rebuildAll()
   }
@@ -93,9 +111,17 @@ class ParamInputs {
   /**Sets the event listener on the new row button. */
   private setNewRowEventListener = () => {
     // Bit of a hack, but need to wait for the inline models to be rendered.
-    document.querySelector(
-      '.add-row a'
-    )!.addEventListener('click', this.rebuildAll);
+
+    const addNewRowBtn = getAddNewRowBtn()
+    if (!addNewRowBtn) {
+      console.warn(
+        'Could not find the add new row button. Auto complete feature will not work.'
+      );
+      return;
+    }
+    addNewRowBtn.forEach(
+      btn => btn.addEventListener('click', this.rebuildAll)
+    );
   }
 
   /**Flushes the registry and rebuilds all the event listeners. */
@@ -134,9 +160,12 @@ class ContentTypeSetup {
       this.setInputOptions
     )
 
-    document.querySelector(
-      '.add-row a'
-    )!.addEventListener('click', this.setInputOptions);
+    const newRowBtn = getAddNewRowBtn()
+    if (newRowBtn) {
+      newRowBtn.forEach(
+        btn => btn.addEventListener('click', this.setInputOptions)
+      );
+    }
   }
 
   setInputOptions = () => {
