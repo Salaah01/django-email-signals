@@ -12,9 +12,9 @@ def render_js(cls):
     """Forcing all media forms to be deferred."""
     return [
         format_html(
-            '<script defer src="{}"></script>',
-            cls.absolute_path(path)
-        ) for path in cls._js
+            '<script defer src="{}"></script>', cls.absolute_path(path)
+        )
+        for path in cls._js
     ]
 
 

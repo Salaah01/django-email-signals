@@ -22,7 +22,7 @@ const autocomplete = (input: HTMLInputElement, options: string[]) => {
     const value = (event.target as HTMLInputElement).value;
 
     closeAllLists();
-    
+
     if (!value) {
       return;
     }
