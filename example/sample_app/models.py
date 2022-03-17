@@ -39,8 +39,11 @@ class Order(models.Model, EmailSignalMixin):
         total = sum([item.quantity for item in orderitems])
         return total
 
-    def emails(self):
+    def customer_email(self):
         return [self.customer.email]
+
+    def new_order_mailing_list(self):
+        return ["new-orders@example.com"]
 
 
 class OrderItem(models.Model):
