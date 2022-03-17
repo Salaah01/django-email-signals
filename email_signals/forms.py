@@ -85,10 +85,17 @@ class SignalConstraintAdminForm(forms.ModelForm):
         return cleaned_data
 
     def clean_param_1(self):
-        """Validate `param_2` can be found in either the signal `kwargs` or the
+        """Validate `param_1` can be found in either the signal `kwargs` or the
         model instance.
         """
         param_1 = self.cleaned_data["param_1"]
+
+        # This isn't the best way to do this. But it's the only way I can think
+        # accepting keys in the kwargs.
+        # For now we'll accept `created` as this is a common parameter to check
+        # on post creation.
+        if param_1 == "created":
+            return param_1
 
         valid, _ = get_param_from_obj(param_1, self.instance.signal.model)
         if not valid:

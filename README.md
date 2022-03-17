@@ -3,7 +3,22 @@ A Django application that provides functionality to create signals via the admin
 
 The application allows you to set your own constraints and email templates and aims to achieve this with minimal configuration.
 
-# Use Cases
+
+## Sections
+- [Django Email Signals](#django-email-signals)
+  - [Sections](#sections)
+  - [Use Cases](#use-cases)
+  - [Usage Example](#usage-example)
+    - [Creating the base signal](#creating-the-base-signal)
+    - [Setting the signal constraints](#setting-the-signal-constraints)
+    - [Template Context](#template-context)
+  - [Installation](#installation)
+  - [Setup](#setup)
+  - [Adding Signals](#adding-signals)
+  - [Playground](#playground)
+  - [Testing](#testing)
+
+## Use Cases
 **Admins are able to setup signals/emails themselves**
 
 If an admin user has requested for an email to be sent when something happens on the database, what do we do? We developers create a new signal, set any constraints, create the email templates, piece everything together, create unit tests and then deploy. Relatively simple, but still time-consuming especially when there are multiple signals to set up for various changes. This quickly becomes a quite lengthy process.
@@ -20,6 +35,44 @@ Creating and testing templates for some bigger teams can be a time-consuming pro
 The process then can become a bit tedious. Ever been in a scenario where you deploy some code to test, have it reviewed, have to tweak some code, redeploy it, and have the process repeated a few times?
 
 This application aims to solve this by providing a way for admins to create the HTML content themselves using a rich text editor. This allows admins to quickly prototype and test the email content themselves. Once ready, all they need to do is click on "show source code", and send that sweet source code to you.
+
+## Usage Example
+Let us imagine that we want to notify a particular team whenever a new order is placed on our website.
+
+### Creating the base signal
+We would start off by setting the following signal:
+[Creating signal](img/creating-signal.png)
+
+In this screenshot we notice a couple of things.
+
+The **model** has been set to "sample_app | order". For this example we have created an order model (can be found in `example/sample_app/models.py`) and we have set **signal type** to **post save**.
+
+This means that we are creating a post save signal on the order model.
+
+In this example, we have entered values for the plain text and HTML content fields. This is fine to do when we do not need to add any additional context in the email. However, if we want to add additional context, we would need to provide a value in the **template** field instead.
+
+We can also see that we have set **mailing list** to `new_order_mailing_list`. In our order model, we have a corresponding `new_order_mailing_list` method which returns a list of emails. This means, this particular email will be sent to the emails returned by `Order.new_order_mailing_list`. By creating various methods containing different lists of emails, we effectively have a way of creating different mailing lists.
+
+Before we start to add any constraints, we nee to save the signal. This will make setting signal constraints easy as it will allow the autocomplete feature to help us. If you are worried about the time between saving the signal and setting the signal constraints, you can always set the **active** flag to false beforehand. This will prevent any email from being sent. 
+
+
+### Setting the signal constraints
+We can now set the constraints for the signal. We will create two constraints:
+1. Must be a new instance (`created == True`).
+2. Customer ID must be greater than 10 (`customer.id` > 10). 
+
+[Setting Constraints](img/signals-constraint-setup.png)
+
+One common check when creating a `post_save` signal is to check is the instance is a new instance. This can be done by setting the parameter to `created` and the comparison to "Is True".
+
+Our order model has a `customer` field which is a foreign key to the `customer` model. We can traverse through the `customer` object to get the `id` of the customer. We can then check if `customer.id > 10`.
+
+The app has a handy autocomplete feature which will help you traverse through model fields and any cached properties. Don't worry about making any mistakes as there is validation in place to reject any parameters that can not be accessed.
+
+Saving this signal will now ensure that the signal will only be sent when the order is a new instance and the customer ID is greater than 10.
+
+### Template Context
+Often with emails we want to add actual context. When this is the case, we would not complete the plain text and HTML content fields, but instead we would set the template in the "template" field. Again, don't worry about making any mistakes here as there is validation in place to check that the template exists.
 
 ## Installation
 To install the application, run the following command:
