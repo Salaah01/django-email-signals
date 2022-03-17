@@ -90,7 +90,7 @@ class SignalConstraintAdminForm(forms.ModelForm):
         """
         param_1 = self.cleaned_data["param_1"]
 
-        valid, _ = get_param_from_obj(param_1, self.instance)
+        valid, _ = get_param_from_obj(param_1, self.instance.signal.model)
         if not valid:
             raise forms.ValidationError(
                 f"The model does not have a parameter called {param_1}"
