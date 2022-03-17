@@ -41,7 +41,7 @@ Let us imagine that we want to notify a particular team whenever a new order is 
 
 ### Creating the base signal
 We would start off by setting the following signal:
-[Creating signal](img/creating-signal.png)
+![Creating signal](img/creating-signal.png)
 
 In this screenshot we notice a couple of things.
 
@@ -61,7 +61,7 @@ We can now set the constraints for the signal. We will create two constraints:
 1. Must be a new instance (`created == True`).
 2. Customer ID must be greater than 10 (`customer.id` > 10). 
 
-[Setting Constraints](img/signals-constraint-setup.png)
+![Setting Constraints](img/signals-constraint-setup.png)
 
 One common check when creating a `post_save` signal is to check is the instance is a new instance. This can be done by setting the parameter to `created` and the comparison to "Is True".
 
