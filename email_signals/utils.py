@@ -52,10 +52,9 @@ def get_param_from_obj(
     """
     param_parts = param.split(seperator)
     current_object = searchable
-
     while param_parts:
-        param_part = param_parts.pop(0)
 
+        param_part = param_parts.pop(0)
         # Need to search in a dictionary separately as `hasattr` is not
         # supported for dictionaries in python 3.8 and below.
         if isinstance(current_object, dict):
@@ -68,6 +67,15 @@ def get_param_from_obj(
         try:
             if hasattr(current_object, param_part):
                 current_object = getattr(current_object, param_part)
+
+                # If the current object is a field, then at this point, the
+                # current object is a relation descriptor. We need to get the
+                # related model.
+                if (
+                    hasattr(current_object, "field")
+                    and current_object.field.is_relation
+                ):
+                    current_object = current_object.field.related_model
                 continue
         except Exception:
             return False, None

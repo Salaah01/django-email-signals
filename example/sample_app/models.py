@@ -37,7 +37,7 @@ class Order(models.Model, EmailSignalMixin):
     def get_cart_items(self):
         orderitems = self.orderitem_set.all()
         total = sum([item.quantity for item in orderitems])
-        return total
+        return 
 
     def emails(self):
         return [self.customer.email]
