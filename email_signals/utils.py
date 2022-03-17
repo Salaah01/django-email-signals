@@ -69,8 +69,9 @@ def get_param_from_obj(
                 current_object = getattr(current_object, param_part)
 
                 # If the current object is a field, then at this point, the
-                # current object is a relation descriptor. We need to get the
-                # related model.
+                # current object may be a relation descriptor. If this is the
+                # case, we need to We point the current object to the related
+                # model.
                 if (
                     hasattr(current_object, "field")
                     and current_object.field.is_relation
