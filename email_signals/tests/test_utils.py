@@ -154,3 +154,45 @@ class TestGetModelAttrNames(EmailSignalTestCase):
 
         for field in ("id", "name", "email"):
             self.assertIn(field, model_attr_names["customer"])
+
+
+class TestAddContextToString(EmailSignalTestCase):
+    """Unittests for the `add_context_to_string` utility function."""
+
+    def test_with_nested_dict(self):
+        """Test the `add_context_to_string` function works with a nested
+        dict.
+        """
+        self.assertEqual(
+            utils.add_context_to_string("test {{ a.a }}", {"a": {"a": 1}}),
+            "test 1",
+        )
+
+    def test_with_nested_list(self):
+        """Test the `add_context_to_string` function works with a list."""
+        self.assertEqual(
+            utils.add_context_to_string("test {{ a.1 }}", {"a": [1, 2, 3]}),
+            "test 2",
+        )
+
+    def test_with_model(self):
+        """Test the `add_context_to_string` function works with a model."""
+
+        self.assertEqual(
+            utils.add_context_to_string(
+                "test {{ order.customer.name }}",
+                {
+                    "order": self.customer_order_rec,
+                },
+            ),
+            f"test {self.customer_rec.name}",
+        )
+
+    def test_with_missing_context(self):
+        """Test that the `add_context_to_string` function replaces missing
+        context with an empty string.
+        """
+        self.assertEqual(
+            utils.add_context_to_string("test {{ a.a }}", {}),
+            "test ",
+        )

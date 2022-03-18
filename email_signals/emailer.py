@@ -2,6 +2,7 @@ import typing as _t
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import send_mail as _send_mail
+from . import utils
 
 
 def send_mail(
@@ -43,8 +44,8 @@ def send_mail(
 
     _send_mail(
         subject=subject,
-        message=plain_message,
-        html_message=html_message,
+        message=utils.add_context_to_string(plain_message, context),
+        html_message=utils.add_context_to_string(html_message, context),
         from_email=from_email,
         recipient_list=recipient_list,
     )
