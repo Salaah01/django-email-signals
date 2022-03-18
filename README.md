@@ -11,7 +11,6 @@ The application allows you to set your own constraints and email templates and a
   - [Usage Example](#usage-example)
     - [Creating the base signal](#creating-the-base-signal)
     - [Setting the signal constraints](#setting-the-signal-constraints)
-    - [Template Context](#template-context)
   - [Installation](#installation)
   - [Setup](#setup)
   - [Adding Signals](#adding-signals)
@@ -49,7 +48,22 @@ The **model** has been set to "sample_app | order". For this example we have cre
 
 This means that we are creating a post save signal on the order model.
 
-In this example, we have entered values for the plain text and HTML content fields. This is fine to do when we do not need to add any additional context in the email. However, if we want to add additional context, we would need to provide a value in the **template** field instead.
+In this example, we have entered values for the plain text and HTML content fields. You will notice that just like we do with templates, we are able to add placeholders for context using the curly braces.
+
+We have used these in the following way:
+```html
+Order ID: {{ instance.id }}
+Customer Name {{ instance.customer.id }}
+Customer Email {{ instance.customer.email }}
+```
+
+As this signal relates to the `Order` model, `instance` represents a single `Order` instance.
+
+When the email is sent, the placeholders will be replaced with the actual context values.
+
+**It is important to note that the only context available is `instance`, and so any other context must be accessible via the `instance` object.**
+
+This is one way to provide template context. If you prefer, you are instead able to provide a value for **template** field which is a path to a template file.
 
 We can also see that we have set **mailing list** to `new_order_mailing_list`. In our order model, we have a corresponding `new_order_mailing_list` method which returns a list of emails. This means, this particular email will be sent to the emails returned by `Order.new_order_mailing_list`. By creating various methods containing different lists of emails, we effectively have a way of creating different mailing lists.
 
@@ -70,9 +84,6 @@ Our order model has a `customer` field which is a foreign key to the `customer` 
 The app has a handy autocomplete feature which will help you traverse through model fields and any cached properties. Don't worry about making any mistakes as there is validation in place to reject any parameters that can not be accessed.
 
 Saving this signal will now ensure that the signal will only be sent when the order is a new instance and the customer ID is greater than 10.
-
-### Template Context
-Often with emails we want to add actual context. When this is the case, we would not complete the plain text and HTML content fields, but instead we would set the template in the "template" field. Again, don't worry about making any mistakes here as there is validation in place to check that the template exists.
 
 ## Installation
 To install the application, run the following command:
@@ -186,19 +197,19 @@ We will imagine I am running a site on localhost and so the admin panel can be f
 A wise man taught me *it's better to sound silly for a moment than not know something and feel stupid forever*. So, in that vein, though it might seem obvious, we'll go through the options in the form and discuss what each option
 is responsible for.
 
-| Field Label      | Field Name       | Description                                                                                                                    |
-| ---------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Name             | name             | An name for your signal, just to make it easier to distinguish from other records.                                             |
-| Description      | description      | (Optional) Description for your signal.                                                                                        |
-| Model (Table)    | content_type     | Choose from the drop down the model this signal relates to.                                                                                        |
-| Plain text content | plain_message | (Optional) Plain text email to send.                                                                                           |
-| HTML content       | html_message       | (Optional) HTML email to send.                                                                                                 |
-| Subject          | subject          | Email subject                                                                                                                  |
-| From email       | from_email       | (Optional) The email sender. Defaults to `settings.EMAIL_SIGNAL_DEFAULT_SENDER`.                                           |
-| Mailing list  | mailing_list    | The recipient list where the text you enter, corresponds to a method called in the model class with the same name. e.g: If you enter `customer_mails`, then there will need to be a method called `customer_mails` that returns a collection of emails in the model class. |
-| Template         | template         | (Optional) Path to a template, should you wish to render an email from a template. This uses Django's template loader, so as the value you provide here should be relative to `settings.TEMPLATES[i]['DIRS']`.                                             |
-| Signal Type      | signal_type      | Type of signal to raise for this record.                                                                                       |
-| Active           | active           | A switch to turn this signal on and off.                                                                                       |
+| Field Label        | Field Name    | Description                                                                                                                                                                                                                                                                |
+| ------------------ | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name               | name          | An name for your signal, just to make it easier to distinguish from other records.                                                                                                                                                                                         |
+| Description        | description   | (Optional) Description for your signal.                                                                                                                                                                                                                                    |
+| Model (Table)      | content_type  | Choose from the drop down the model this signal relates to.                                                                                                                                                                                                                |
+| Plain text content | plain_message | (Optional) Plain text email to send.                                                                                                                                                                                                                                       |
+| HTML content       | html_message  | (Optional) HTML email to send.                                                                                                                                                                                                                                             |
+| Subject            | subject       | Email subject                                                                                                                                                                                                                                                              |
+| From email         | from_email    | (Optional) The email sender. Defaults to `settings.EMAIL_SIGNAL_DEFAULT_SENDER`.                                                                                                                                                                                           |
+| Mailing list       | mailing_list  | The recipient list where the text you enter, corresponds to a method called in the model class with the same name. e.g: If you enter `customer_mails`, then there will need to be a method called `customer_mails` that returns a collection of emails in the model class. |
+| Template           | template      | (Optional) Path to a template, should you wish to render an email from a template. This uses Django's template loader, so as the value you provide here should be relative to `settings.TEMPLATES[i]['DIRS']`.                                                             |
+| Signal Type        | signal_type   | Type of signal to raise for this record.                                                                                                                                                                                                                                   |
+| Active             | active        | A switch to turn this signal on and off.                                                                                                                                                                                                                                   |
 
 **Signal Constraints**
 This inline model is where you can set some constraints which will determine if the signal should be raised on a case by case basis.

@@ -1,6 +1,7 @@
 """Contains utility functions for the email_signals package."""
 
 import typing as _t
+from django.template import loader
 from django.db.models.base import ModelBase
 from django.db.models.fields.related_descriptors import ManyToManyDescriptor
 
@@ -150,3 +151,26 @@ def get_model_attr_names(model_class: ModelBase, seen_attrs=None) -> dict:
                 )
 
     return attr_names
+
+
+def add_context_to_string(template_str: str, context: dict) -> str:
+    """Add the context to the template string.
+
+    Args:
+        template_str: The template string to add the context to.
+        context: The context to add to the template string.
+
+    Returns:
+        str: The template string with the context added.
+    """
+    engines = loader._engine_list()
+    for engine in engines:
+        try:
+            template = engine.from_string(template_str)
+            return template.render(context)
+        except AttributeError:
+            continue
+    else:
+        raise ValueError(
+            "Could not find a template engine that can render the string."
+        )
