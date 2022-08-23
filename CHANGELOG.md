@@ -1,5 +1,8 @@
 # Change Log
 
+### 1.0.5 - setup.cfg requirements fixed
+- Fixed Django requirement in setup.cfg
+
 ## 1.0.4 - Ability to add context to plain and HTML fields.
 - Added the ability to add context to the plain and HTML fields.
 
