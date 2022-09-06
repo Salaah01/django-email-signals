@@ -13,6 +13,16 @@ class TestEmailSignalMixin(EmailSignalTestCase):
             self.customer_rec.email_signal_recipients("my_mailing_list"), list
         )
 
+    def test_email_signal_emails_recipients(self):
+        """Test the `email_signal_recipients` method with provided emails."""
+
+        self.assertIsInstance(
+            self.customer_rec.email_signal_recipients(
+                "test@email.com,test1@email.com"
+            ),
+            list,
+        )
+
     def test_email_signal_recipients_invalid(self):
         """Test the `email_signal_recipients` method with an invalid function
         name. It should raise an `NotImplementedError`.

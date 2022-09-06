@@ -46,6 +46,13 @@ class TestSignalAdminForm(EmailSignalTestCase):
         form = self.sample_form({"mailing_list": "invalid"})
         self.assertFalse(form.is_valid())
 
+    def test_email_mailing_list(self):
+        """Test form where an email list `mailing_list` is provided."""
+        form = self.sample_form(
+            {"mailing_list": "test@email.com,test1@email.com"}
+        )
+        self.assertTrue(form.is_valid())
+
     def test_invalid_template(self):
         """Test form where an invalid `template` is provided."""
         form = self.sample_form({"template": "invalid"})

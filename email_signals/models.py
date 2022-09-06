@@ -21,11 +21,17 @@ class EmailSignalMixin:
             A list of email addresses to send emails to.
 
         """
-        if not hasattr(self, method_name):
+        emails = None
+        if hasattr(self, method_name):
+            emails = getattr(self, method_name)()
+        elif "@" in method_name:
+            emails = method_name.split(",")
+            emails = [email.strip() for email in emails if email]
+        if emails is None:
             raise NotImplementedError(
-                f"{self.__class__.__name__} has no method {method_name}"
+                f"{self.__class__.__name__} has no method {method_name} or {method_name} is not a list of emails"
             )
-        return getattr(self, method_name)()
+        return emails
 
 
 class Signal(models.Model):
@@ -63,10 +69,8 @@ class Signal(models.Model):
         help_text="If not set, `settings.EMAIL_SIGNAL_DEFAULT_SENDER` \
             with be used.",
     )
-    mailing_list = models.CharField(
-        max_length=100,
-        help_text="The mailing list to send the signal to. Will search for a \
-            function with the same name in the model instance.",
+    mailing_list = models.TextField(
+        help_text="The mailing list to send the signal to. Either enter a comma separated list of emails or the app will search for a function with the same name in the model instance.",
     )
     template = models.CharField(
         max_length=100,
