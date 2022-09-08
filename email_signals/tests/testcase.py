@@ -15,9 +15,7 @@ def setup_settings():
     settings.TEMPLATES = [
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
-            "DIRS": os.path.join(
-                Path(__file__).resolve().parent, "test_emailer.html"
-            ),
+            "DIRS": [Path(__file__).resolve().parent.parent.parent],
         }
     ]
 
