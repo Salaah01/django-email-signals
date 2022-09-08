@@ -1,5 +1,8 @@
 # Change Log
 
+### 1.0.6 Ability to add email list
+- `mailing_list` now accepts a comma separated list of email addresses as well as a function that would return a list of email addresses.
+
 ### 1.0.5 - setup.cfg requirements fixed
 - Fixed Django requirement in setup.cfg
 
