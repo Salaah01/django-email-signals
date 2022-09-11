@@ -14,7 +14,7 @@ class TestConstraintChecker(EmailSignalTestCase):
         signal.
         """
         self.create_signal(self.customer_rec)
-        constraint_checker = ConstraintChecker(self.customer_rec, {})
+        constraint_checker = ConstraintChecker(self.customer_rec, [], {})
         self.assertEqual(list(constraint_checker.constraints), [])
 
     def test_init_with_constraints(self):
@@ -29,7 +29,10 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2="b",
         )
         signal_constraint.save()
-        constraint_checker = ConstraintChecker(self.customer_rec, {})
+        constraints = signal_rec.constraints.all()
+        constraint_checker = ConstraintChecker(
+            self.customer_rec, constraints, {}
+        )
 
         self.assertEqual(
             list(constraint_checker.constraints), [signal_constraint]
@@ -58,7 +61,10 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2="b",
         )
         constraint.save()
-        constaint_checker = ConstraintChecker(self.customer_rec, {})
+        constraints = signal.constraints.all()
+        constaint_checker = ConstraintChecker(
+            self.customer_rec, constraints, {}
+        )
 
         with self.assertRaises(ValueError):
             constaint_checker.get_param_1(constraint.param_1)
@@ -75,8 +81,9 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2=None,
         )
         constraint.save()
+        constraints = signal.constraints.all()
         constaint_checker = ConstraintChecker(
-            self.customer_rec, {"a": {"b": 1}}
+            self.customer_rec, constraints, {"a": {"b": 1}}
         )
 
         self.assertEqual(constaint_checker.get_param_1(constraint.param_1), 1)
@@ -96,7 +103,10 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2=None,
         )
         constraint.save()
-        constaint_checker = ConstraintChecker(self.customer_order_rec, {})
+        constraints = signal.constraints.all()
+        constaint_checker = ConstraintChecker(
+            self.customer_order_rec, constraints, {}
+        )
 
         self.assertEqual(
             constaint_checker.get_param_1(constraint.param_1), "Test Name"
@@ -114,8 +124,9 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2="a.b",
         )
         constraint.save()
+        constraints = signal.constraints.all()
         constaint_checker = ConstraintChecker(
-            self.customer_rec, {"a": {"b": 1}}
+            self.customer_rec, constraints, {"a": {"b": 1}}
         )
 
         self.assertEqual(constaint_checker.get_param_1(constraint.param_2), 1)
@@ -135,7 +146,10 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2="customer.name",
         )
         constraint.save()
-        constaint_checker = ConstraintChecker(self.customer_order_rec, {})
+        constraints = signal.constraints.all()
+        constaint_checker = ConstraintChecker(
+            self.customer_order_rec, constraints, {}
+        )
 
         self.assertEqual(
             constaint_checker.get_param_2(constraint.param_2), "Test Name"
@@ -153,7 +167,10 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2="b",
         )
         constraint.save()
-        constaint_checker = ConstraintChecker(self.customer_rec, {})
+        constraints = signal.constraints.all()
+        constaint_checker = ConstraintChecker(
+            self.customer_rec, constraints, {}
+        )
 
         self.assertEqual(
             constaint_checker.get_param_2(constraint.param_2), "b"
@@ -169,7 +186,10 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2="1.1",
         )
         constraint.save()
-        constaint_checker = ConstraintChecker(self.customer_rec, {"a": 1})
+        constraints = signal.constraints.all()
+        constaint_checker = ConstraintChecker(
+            self.customer_rec, constraints, {"a": 1}
+        )
 
         self.assertEqual(constaint_checker.get_params(constraint), (1, 1.1))
 
@@ -183,7 +203,10 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2="1.1",
         )
         constraint.save()
-        constaint_checker = ConstraintChecker(self.customer_rec, {"a": 1.1})
+        constraints = signal.constraints.all()
+        constaint_checker = ConstraintChecker(
+            self.customer_rec, constraints, {"a": 1.1}
+        )
 
         self.assertTrue(constaint_checker.run_tests())
 
@@ -197,7 +220,10 @@ class TestConstraintChecker(EmailSignalTestCase):
             param_2="1.1",
         )
         constraint.save()
-        constaint_checker = ConstraintChecker(self.customer_rec, {"a": 1})
+        constraints = signal.constraints.all()
+        constaint_checker = ConstraintChecker(
+            self.customer_rec, constraints, {"a": 1}
+        )
 
         self.assertFalse(constaint_checker.run_tests())
 
