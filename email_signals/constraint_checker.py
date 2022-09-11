@@ -11,20 +11,19 @@ class ConstraintChecker:
     determines if it is able to raise a signal.
     """
 
-    def __init__(self, instance: Model, signal_kwargs: dict):
+    def __init__(
+        self, instance: Model, constraints: _t.List[Model], signal_kwargs: dict
+    ):
         """Initialise the checker with the instance and signal kwargs.
 
         Args:
             instance: The model instance on which a signal is to be raised.
+            constraints: The constraints for the model instance
             signal_kwargs: The kwargs retrieved from the signal handler.
         """
         self.instance = instance
         self.signal_kwargs = signal_kwargs
-        self.constraints = SignalConstraint.objects.filter(
-            signal=Signal.objects.get(
-                content_type=ContentType.objects.get_for_model(instance)
-            )
-        )
+        self.constraints = constraints
 
     def run_tests(self) -> bool:
         """Run all tests and return `True` if all tests pass."""

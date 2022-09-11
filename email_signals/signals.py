@@ -17,7 +17,8 @@ def signal_callback(
     for model_signal in model_signals:
         if not model_signal.active:
             continue
-        if not ConstraintChecker(instance, kwargs).run_tests():
+        constraints = model_signal.constraints.all()
+        if not ConstraintChecker(instance, constraints, kwargs).run_tests():
             continue
 
         # When the program reaches this point, the constraint checker has
