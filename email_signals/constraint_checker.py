@@ -1,8 +1,6 @@
 import typing as _t
 from django.db.models import Model
-from django.contrib.contenttypes.models import ContentType
-
-from .models import Signal, SignalConstraint
+from .models import SignalConstraint
 from . import constraint_methods, utils
 
 

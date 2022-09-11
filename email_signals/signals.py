@@ -41,7 +41,7 @@ def setup():
     registry.
     """
 
-    # Import needs to happen here for unittesting - otherwise the
+    # Import needs to happen here for unit testing - otherwise the
     # changes `registered_models` to are not picked up by the tests.
     from .registry import registered_models
 
