@@ -7,7 +7,7 @@ from . import constraint_methods, utils
 
 
 class ConstraintChecker:
-    """Determins whether a model instance satisfies a constraints and
+    """Determines whether a model instance satisfies a constraints and
     determines if it is able to raise a signal.
     """
 
