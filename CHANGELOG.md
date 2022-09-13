@@ -1,5 +1,8 @@
 # Change Log
 
+### 1.0.7 Fixed bug relating to multiple signals for the same model
+- When retrieving signal constraints we were previously filtering by a signal's content type using the `Signal.objects.get` method. However, there can been multiple `Signal` instances for a single content type. This therefore would cause an error. This has been fixed by retrieving the signal constraints from the `Signal` instance directly.
+
 ### 1.0.6 Ability to add email list
 - `mailing_list` now accepts a comma separated list of email addresses as well as a function that would return a list of email addresses.
 

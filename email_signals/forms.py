@@ -41,7 +41,8 @@ class SignalAdminForm(forms.ModelForm):
     def _clean_mailing_list(self):
         """The `mailing_list` field contains a string which corresponds to a
         method that should exist in the model. Check that the function does
-        exists. OR The mailing list can be a list of emails, there should be at least one email.
+        exists. OR The mailing list can be a list of emails, there should be at
+        least one email.
         """
         mailing_list = self.cleaned_data["mailing_list"]
         content_type = self.cleaned_data["content_type"]
@@ -51,7 +52,8 @@ class SignalAdminForm(forms.ModelForm):
             and "@" not in mailing_list
         ):
             raise forms.ValidationError(
-                f"The model does not have a function called {mailing_list} and the mailing list does not contain a list of emails"
+                f"The model does not have a function called {mailing_list} "
+                "and the mailing list does not contain a list of emails"
             )
         return mailing_list
 
