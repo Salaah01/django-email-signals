@@ -20,7 +20,6 @@ venv:
 py-install: requirements.txt
 	${PIP} install -r requirements.txt
 
-
 # Updates the requirements.txt
 update-python-pkgs:
 	pip-compile requirements.in
