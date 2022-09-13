@@ -17,8 +17,8 @@ venv:
 	source venv/bin/activate
 
 # Install dependencies
-py-install: venv email_signals/requirements.txt email_signals/requirements.dev.txt package.json package-lock.json
-	${PIP} install -r email_signals/requirements.txt
+py-install: requirements.txt
+	${PIP} install -r requirements.txt
 
 
 # Updates the requirements.txt

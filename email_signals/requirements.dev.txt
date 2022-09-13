@@ -1,7 +1,0 @@
--r requirements.txt
-
-# Formatting
-flake8==4.0.1
-
-# Linting
-black==22.1.0
