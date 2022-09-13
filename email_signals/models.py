@@ -29,7 +29,8 @@ class EmailSignalMixin:
             emails = [email.strip() for email in emails if email]
         if emails is None:
             raise NotImplementedError(
-                f"{self.__class__.__name__} has no method {method_name} or {method_name} is not a list of emails"
+                f"{self.__class__.__name__} has no method {method_name} or "
+                f"{method_name} is not a list of emails"
             )
         return emails
 
@@ -66,11 +67,13 @@ class Signal(models.Model):
     from_email = models.EmailField(
         null=True,
         blank=True,
-        help_text="If not set, `settings.EMAIL_SIGNAL_DEFAULT_SENDER` \
-            with be used.",
+        help_text="If not set, `settings.EMAIL_SIGNAL_DEFAULT_SENDER` "
+        "with be used.",
     )
     mailing_list = models.TextField(
-        help_text="The mailing list to send the signal to. Either enter a comma separated list of emails or the app will search for a function with the same name in the model instance.",
+        help_text="The mailing list to send the signal to. Either enter a "
+        "comma separated list of emails or the app will search for a function "
+        "with the same name in the model instance.",
     )
     template = models.CharField(
         max_length=100,

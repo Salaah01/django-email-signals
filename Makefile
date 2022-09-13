@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 VENV = venv
 PYTHON = ${VENV}/bin/python3
 PIP = ${VENV}/bin/pip3
@@ -10,13 +11,18 @@ current_dir_full_path := $(abspath $(current_dir))
 # LOCAL USAGE
 
 # Create a virtual environment
+.PHONY: venv
 venv:
 	python3 -m venv venv
+	source venv/bin/activate
 
 # Install dependencies
-py-install: venv email_signals/requirements.txt email_signals/requirements.dev.txt package.json package-lock.json
-	${PIP} install -r email_signals/requirements.txt
-	${PIP} install -r email_signals/requirements.dev.txt
+py-install: requirements.txt
+	${PIP} install -r requirements.txt
+
+# Updates the requirements.txt
+update-python-pkgs:
+	pip-compile requirements.in
 
 node-install:
 	npm install
@@ -39,5 +45,13 @@ lint: py-install
 	${PYTHON} -m flake8 --exclude=migrations email_signals/.
 
 # Builds node packages
-build: node-install
+build-node: node-install
 	npm run build
+
+# Builds the package ready for deployment
+build-package:
+	${PYTHON} setup.py sdist bdist_wheel
+
+# Uploads the package to PyPI
+upload-package:
+	${PYTHON} -m twine upload dist/*
