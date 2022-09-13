@@ -1,4 +1,3 @@
-import os
 import typing as _t
 from pathlib import Path
 from django.test import TestCase
