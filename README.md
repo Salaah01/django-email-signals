@@ -15,6 +15,9 @@ The application allows you to set your own constraints and email templates and a
   - [Setup](#setup)
   - [Adding Signals](#adding-signals)
   - [Playground](#playground)
+  - [Contributing](#contributing)
+    - [Writing Code](#writing-code)
+    - [Formatting and Linting](#formatting-and-linting)
   - [Testing](#testing)
 
 ## Use Cases
@@ -197,19 +200,19 @@ We will imagine I am running a site on localhost and so the admin panel can be f
 A wise man taught me *it's better to sound silly for a moment than not know something and feel stupid forever*. So, in that vein, though it might seem obvious, we'll go through the options in the form and discuss what each option
 is responsible for.
 
-| Field Label        | Field Name    | Description                                                                                                                                                                                                                                                                |
-| ------------------ | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Name               | name          | An name for your signal, just to make it easier to distinguish from other records.                                                                                                                                                                                         |
-| Description        | description   | (Optional) Description for your signal.                                                                                                                                                                                                                                    |
-| Model (Table)      | content_type  | Choose from the drop down the model this signal relates to.                                                                                                                                                                                                                |
-| Plain text content | plain_message | (Optional) Plain text email to send.                                                                                                                                                                                                                                       |
-| HTML content       | html_message  | (Optional) HTML email to send.                                                                                                                                                                                                                                             |
-| Subject            | subject       | Email subject                                                                                                                                                                                                                                                              |
-| From email         | from_email    | (Optional) The email sender. Defaults to `settings.EMAIL_SIGNAL_DEFAULT_SENDER`.                                                                                                                                                                                           |
-| Mailing list       | mailing_list  | The recipient list where the text you enter, corresponds to a method called in the model class with the same name. e.g: If you enter `customer_mails`, then there will need to be a method called `customer_mails` that returns a collection of emails in the model class. Alternatively, this can be a list of emails separated by a comma. e.g: `test@email.com,test2@email.com` would send the email to both of these emails.|
-| Template           | template      | (Optional) Path to a template, should you wish to render an email from a template. This uses Django's template loader, so as the value you provide here should be relative to `settings.TEMPLATES[i]['DIRS']`.                                                             |
-| Signal Type        | signal_type   | Type of signal to raise for this record.                                                                                                                                                                                                                                   |
-| Active             | active        | A switch to turn this signal on and off.                                                                                                                                                                                                                                   |
+| Field Label        | Field Name    | Description                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name               | name          | An name for your signal, just to make it easier to distinguish from other records.                                                                                                                                                                                                                                                                                                                                               |
+| Description        | description   | (Optional) Description for your signal.                                                                                                                                                                                                                                                                                                                                                                                          |
+| Model (Table)      | content_type  | Choose from the drop down the model this signal relates to.                                                                                                                                                                                                                                                                                                                                                                      |
+| Plain text content | plain_message | (Optional) Plain text email to send.                                                                                                                                                                                                                                                                                                                                                                                             |
+| HTML content       | html_message  | (Optional) HTML email to send.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Subject            | subject       | Email subject                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| From email         | from_email    | (Optional) The email sender. Defaults to `settings.EMAIL_SIGNAL_DEFAULT_SENDER`.                                                                                                                                                                                                                                                                                                                                                 |
+| Mailing list       | mailing_list  | The recipient list where the text you enter, corresponds to a method called in the model class with the same name. e.g: If you enter `customer_mails`, then there will need to be a method called `customer_mails` that returns a collection of emails in the model class. Alternatively, this can be a list of emails separated by a comma. e.g: `test@email.com,test2@email.com` would send the email to both of these emails. |
+| Template           | template      | (Optional) Path to a template, should you wish to render an email from a template. This uses Django's template loader, so as the value you provide here should be relative to `settings.TEMPLATES[i]['DIRS']`.                                                                                                                                                                                                                   |
+| Signal Type        | signal_type   | Type of signal to raise for this record.                                                                                                                                                                                                                                                                                                                                                                                         |
+| Active             | active        | A switch to turn this signal on and off.                                                                                                                                                                                                                                                                                                                                                                                         |
 
 **Signal Constraints**
 This inline model is where you can set some constraints which will determine if the signal should be raised on a case by case basis.
@@ -273,6 +276,45 @@ The repository comes with an example project to get you started. If you prefer t
 
 Navigating to `example` and running the Django project inside.
 
+## Contributing
+If you have any suggestions or improvements, please feel free to open an issue or pull request.
+
+### Writing Code
+If you wish to contribute code, please follow the following steps:
+
+1. Fork the repository
+2. Create an issue to discuss the feature you wish to add or bug you wish to fix
+3. Clone the repository
+4. Create a new branch for your feature or bug fix
+5. Create a virtual environment and install the requirements
+6. Run `npm install` to install the dependencies for the example project
+7. If you intent to make changes to the TypeScript or Sass files, run `npm start` to start the webpack dev server. This will watch for changes and recompile the files. Otherwise, run `npm run build` to compile the files once.
+8. Write some awesome code
+9. Run tests (instructions are [here](#testing))
+10. When you're ready to submit your code, run the [formatter and linter](#formatting-and-linting)
+11. Commit your changes, push to your fork and open a pull request
+
+### Formatting and Linting
+When contributing, please ensure that you have added tests for your changes and that all your tests pass (see [testing](#testing)). Please also insure that your code is formatted correctly and that your code passes linting.
+
+We use `black` and `flake8` to format and lint our code.
+If you have `make` installed you can run the following to format and lint your code:
+
+```bash
+make format
+make lint
+```
+
+Alternatively, you can run the following commands:
+
+```bash
+black email_signals
+flake8 --exclude=migrations email_signals
+```
+
+
 
 ## Testing
-In the root of the project there is a `runtests.py` file which can be used to run the tests.
+This repository uses `tox` to run tests against multiple versions of Python and Django. If you have `make` installed, you can simply run the tests by running `make tox`. Otherwise, you can run the tests by running `tox -s` in the root of the repository.
+
+If you wish to run the tests for your current Python version only, you can either run `tox -e py` or `python3 runtests.py`.
