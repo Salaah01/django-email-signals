@@ -36,6 +36,10 @@ runserver: py-install
 test: py-install
 	${PYTHON} runtests.py
 
+# Runs test with all environments defined in the `tox.ini` file
+tox:
+	tox -s
+
 # Runs formatter
 format: py-install
 	${PYTHON} -m black email_signals/.
