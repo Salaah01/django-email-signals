@@ -1,3 +1,5 @@
+-r requirements-ci.txt
+
 Django==3.2.9
 django-ckeditor==6.2.0
 black==22.8.0

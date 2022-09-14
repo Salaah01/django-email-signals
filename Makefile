@@ -22,6 +22,7 @@ py-install: requirements.txt
 
 # Updates the requirements.txt
 update-python-pkgs:
+	pip-compile requirements-ci.in
 	pip-compile requirements.in
 
 node-install:
