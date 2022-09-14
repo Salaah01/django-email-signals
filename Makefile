@@ -37,8 +37,8 @@ test: py-install
 	${PYTHON} runtests.py
 
 # Runs test with all environments defined in the `tox.ini` file
-test-tox: py-install
-	tox
+tox:
+	tox -s
 
 # Runs formatter
 format: py-install
