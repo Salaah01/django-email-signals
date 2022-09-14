@@ -1,8 +1,8 @@
--r requirements-ci.txt
-
 Django==3.2.9
 django-ckeditor==6.2.0
 black==22.8.0
 flake8==4.0.1
 pip-tools==6.8.0
+tox==3.26.0
+flake8==4.0.1
 tox==3.26.0
