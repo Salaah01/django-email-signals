@@ -15,10 +15,8 @@ click==8.1.3
     #   black
     #   pip-tools
 distlib==0.3.6
-    # via
-    #   -r requirements-ci.txt
-    #   virtualenv
-django==3.2.9
+    # via virtualenv
+django==3.2.14
     # via
     #   -r requirements.in
     #   django-js-asset
@@ -28,22 +26,16 @@ django-js-asset==2.0.0
     # via django-ckeditor
 filelock==3.8.0
     # via
-    #   -r requirements-ci.txt
     #   tox
     #   virtualenv
 flake8==4.0.1
-    # via
-    #   -r requirements-ci.txt
-    #   -r requirements.in
+    # via -r requirements.in
 mccabe==0.6.1
-    # via
-    #   -r requirements-ci.txt
-    #   flake8
+    # via flake8
 mypy-extensions==0.4.3
     # via black
 packaging==21.3
     # via
-    #   -r requirements-ci.txt
     #   build
     #   tox
 pathspec==0.10.1
@@ -54,53 +46,35 @@ pip-tools==6.8.0
     # via -r requirements.in
 platformdirs==2.5.2
     # via
-    #   -r requirements-ci.txt
     #   black
     #   virtualenv
 pluggy==1.0.0
-    # via
-    #   -r requirements-ci.txt
-    #   tox
+    # via tox
 py==1.11.0
-    # via
-    #   -r requirements-ci.txt
-    #   tox
+    # via tox
 pycodestyle==2.8.0
-    # via
-    #   -r requirements-ci.txt
-    #   flake8
+    # via flake8
 pyflakes==2.4.0
-    # via
-    #   -r requirements-ci.txt
-    #   flake8
+    # via flake8
 pyparsing==3.0.9
-    # via
-    #   -r requirements-ci.txt
-    #   packaging
+    # via packaging
 pytz==2022.2.1
     # via django
 six==1.16.0
-    # via
-    #   -r requirements-ci.txt
-    #   tox
+    # via tox
 sqlparse==0.4.2
     # via django
 tomli==2.0.1
     # via
-    #   -r requirements-ci.txt
     #   black
     #   build
     #   tox
 tox==3.26.0
-    # via
-    #   -r requirements-ci.txt
-    #   -r requirements.in
+    # via -r requirements.in
 typing-extensions==4.3.0
     # via black
 virtualenv==20.16.5
-    # via
-    #   -r requirements-ci.txt
-    #   tox
+    # via tox
 wheel==0.37.1
     # via pip-tools
 
