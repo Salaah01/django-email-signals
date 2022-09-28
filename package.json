@@ -1,6 +1,6 @@
 {
   "name": "django-email-signals",
-  "version": "1.0.9",
+  "version": "1.0.8",
   "description": "A Django application that provides functionality to create signals via the admin panel which will send emails based on some changes to some models.",
   "main": "index.js",
   "scripts": {
