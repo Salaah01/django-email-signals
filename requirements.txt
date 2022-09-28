@@ -18,7 +18,7 @@ distlib==0.3.6
     # via
     #   -r requirements-ci.txt
     #   virtualenv
-django==3.2.9
+django==3.2.14
     # via
     #   -r requirements.in
     #   django-js-asset
