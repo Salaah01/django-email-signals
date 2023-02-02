@@ -1,4 +1,4 @@
-Django==3.2.14
+Django==3.2.16
 django-ckeditor==6.2.0
 black==22.8.0
 flake8==4.0.1
