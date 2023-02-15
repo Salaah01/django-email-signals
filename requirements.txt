@@ -16,7 +16,7 @@ click==8.1.3
     #   pip-tools
 distlib==0.3.6
     # via virtualenv
-django==3.2.14
+django==3.2.18
     # via
     #   -r requirements.in
     #   django-js-asset
