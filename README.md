@@ -101,25 +101,25 @@ git clone https://github.com/Salaah01/django-email-signals.git
 
 ## Setup
 **1. Add to `INSTALLED_APPS`**
-i. Add Add `ckeditor` to your `INSTALLED_APPS` in your `settings.py` file.
+i. Add Add `tinymce` to your `INSTALLED_APPS` in your `settings.py` file.
 
 ```python
 INSTALLED_APPS = [
   'app_1`,
   'app_2`,
   '...',
-  'ckeditor',
+  'tinymce',
 ]
 ```
 
-ii. Add Add `email_signals` to your `INSTALLED_APPS` in your `settings.py` file. This should be added after any apps which contain models for which you would like to create signals using this application.
+ii. Add `email_signals` to your `INSTALLED_APPS` in your `settings.py` file. This should be added after any apps which contain models for which you would like to create signals using this application.
 
 ```python
 INSTALLED_APPS = [
   'app_1`,
   'app_2`,
   '...',
-  'ckeditor',
+  'tinymce',
   'email_signals`
 ]
 ```
@@ -130,13 +130,14 @@ python manage.py migrate
 python manage.py collectstatic
 ```
 
-**3. Update URLs (Option)**
+**3. Update URLs (Optional)**
 Update your root `urls.py` file to include the following:
 ```python
 from django.urls import include
 
 url_patterns = [
   path('email-signals/', include('email_signals.urls')),
+  path('tinymce/', include('tinymce.urls')),
 ]
 ```
 We recommend changing the URL to something a bit harder to guess, just to make life harder for those pesky snoopers. The application paths all require the user to be a staff member to be able to access the links.

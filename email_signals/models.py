@@ -2,7 +2,7 @@ import typing as _t
 from django.db import models
 from django.db.models import signals
 from django.contrib.contenttypes.models import ContentType
-from ckeditor.fields import RichTextField
+from tinymce.models import HTMLField
 
 
 class EmailSignalMixin:
@@ -58,7 +58,7 @@ class Signal(models.Model):
         null=True,
         verbose_name="Plain text content",
     )
-    html_message = RichTextField(
+    html_message = HTMLField(
         blank=True,
         null=True,
         verbose_name="HTML content",
