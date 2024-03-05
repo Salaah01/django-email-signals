@@ -130,13 +130,14 @@ python manage.py migrate
 python manage.py collectstatic
 ```
 
-**3. Update URLs (Option)**
+**3. Update URLs (Optional)**
 Update your root `urls.py` file to include the following:
 ```python
 from django.urls import include
 
 url_patterns = [
   path('email-signals/', include('email_signals.urls')),
+  path('tinymce/', include('tinymce.urls')),
 ]
 ```
 We recommend changing the URL to something a bit harder to guess, just to make life harder for those pesky snoopers. The application paths all require the user to be a staff member to be able to access the links.
