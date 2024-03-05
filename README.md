@@ -101,25 +101,25 @@ git clone https://github.com/Salaah01/django-email-signals.git
 
 ## Setup
 **1. Add to `INSTALLED_APPS`**
-i. Add Add `ckeditor` to your `INSTALLED_APPS` in your `settings.py` file.
+i. Add Add `tinymce` to your `INSTALLED_APPS` in your `settings.py` file.
 
 ```python
 INSTALLED_APPS = [
   'app_1`,
   'app_2`,
   '...',
-  'ckeditor',
+  'tinymce',
 ]
 ```
 
-ii. Add Add `email_signals` to your `INSTALLED_APPS` in your `settings.py` file. This should be added after any apps which contain models for which you would like to create signals using this application.
+ii. Add `email_signals` to your `INSTALLED_APPS` in your `settings.py` file. This should be added after any apps which contain models for which you would like to create signals using this application.
 
 ```python
 INSTALLED_APPS = [
   'app_1`,
   'app_2`,
   '...',
-  'ckeditor',
+  'tinymce',
   'email_signals`
 ]
 ```
