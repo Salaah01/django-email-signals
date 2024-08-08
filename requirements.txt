@@ -16,7 +16,7 @@ click==8.1.7
     #   pip-tools
 distlib==0.3.8
     # via virtualenv
-django==3.2.25
+django==4.2.15
     # via
     #   -r requirements.in
     #   django-tinymce
