@@ -16,7 +16,7 @@ click==8.1.7
     #   pip-tools
 distlib==0.3.8
     # via virtualenv
-django==3.2.25
+django==4.2.15
     # via
     #   -r requirements.in
     #   django-tinymce
@@ -60,7 +60,7 @@ pytz==2024.1
     # via django
 six==1.16.0
     # via tox
-sqlparse==0.4.4
+sqlparse==0.5.0
     # via django
 tomli==2.0.1
     # via
@@ -78,9 +78,10 @@ virtualenv==20.25.1
     # via tox
 wheel==0.42.0
     # via pip-tools
-zipp==3.17.0
+zipp==3.19.1
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
 # setuptools
+setuptools>=70.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
