@@ -16,7 +16,7 @@ click==8.1.7
     #   pip-tools
 distlib==0.3.8
     # via virtualenv
-django==3.2.25
+django==4.2.21
     # via
     #   -r requirements.in
     #   django-tinymce
@@ -84,3 +84,4 @@ zipp==3.17.0
 # The following packages are considered to be unsafe in a requirements file:
 # pip
 # setuptools
+setuptools>=78.1.1 # not directly required, pinned by Snyk to avoid a vulnerability
