@@ -1,1 +1,2 @@
-Django==3.2.25
+Django==4.2.27
+sqlparse>=0.5.4 # not directly required, pinned by Snyk to avoid a vulnerability
